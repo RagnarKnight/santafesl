@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-hidden="true">
+  <rect width="400" height="300" fill="#FBE3DC"/>
+  <rect y="238" width="400" height="62" fill="#F3CFC5"/>
+  <!-- salón comunitario -->
+  <rect x="52" y="120" width="170" height="122" fill="#FFFCF6"/>
+  <path d="M40 124L137 62l97 62z" fill="#2B2420"/>
+  <rect x="120" y="22" width="34" height="48" fill="#FFFCF6"/>
+  <path d="M114 28l23-18 23 18z" fill="#F28C45"/>
+  <rect x="129" y="38" width="16" height="22" rx="8" fill="#2B2420"/>
+  <rect x="112" y="170" width="50" height="72" rx="25" fill="#C62828"/>
+  <rect x="68" y="150" width="28" height="36" rx="14" fill="#FBE3DC"/>
+  <rect x="178" y="150" width="28" height="36" rx="14" fill="#FBE3DC"/>
+  <!-- lista de miembros -->
+  <rect x="240" y="64" width="112" height="132" rx="12" fill="#FFFCF6" stroke="#2B2420" stroke-width="3"/>
+  <rect x="270" y="54" width="52" height="20" rx="8" fill="#2B2420"/>
+  <circle cx="264" cy="102" r="9" fill="#F28C45"/>
+  <path d="M259 102l4 4 7-8" fill="none" stroke="#2B2420" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="282" y="97" width="56" height="10" rx="5" fill="#2B2420" opacity=".75"/>
+  <circle cx="264" cy="134" r="9" fill="#F28C45"/>
+  <path d="M259 134l4 4 7-8" fill="none" stroke="#2B2420" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="282" y="129" width="44" height="10" rx="5" fill="#2B2420" opacity=".75"/>
+  <circle cx="264" cy="166" r="9" fill="none" stroke="#2B2420" stroke-width="3"/>
+  <rect x="282" y="161" width="52" height="10" rx="5" fill="#2B2420" opacity=".4"/>
+  <!-- personas -->
+  <g>
+    <circle cx="262" cy="232" r="13" fill="#F28C45"/><path d="M240 276a22 22 0 0 1 44 0z" fill="#F28C45"/>
+    <circle cx="306" cy="226" r="14" fill="#C62828"/><path d="M283 276a23 23 0 0 1 46 0z" fill="#C62828"/>
+    <circle cx="350" cy="232" r="13" fill="#2B2420"/><path d="M328 276a22 22 0 0 1 44 0z" fill="#2B2420"/>
+  </g>
+</svg>

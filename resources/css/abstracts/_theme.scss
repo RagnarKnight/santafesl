@@ -1,0 +1,8 @@
+// Se importa DESPUÉS de bootstrap/variables y ANTES de bootstrap/maps.
+// "brand" es el azul del nombre SantaFeSL: genera .text-brand, .bg-brand, etc.
+$theme-colors: map-merge(
+    $theme-colors,
+    (
+        'brand': $sfsl-blue,
+    )
+);

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-hidden="true">
+  <rect width="400" height="300" fill="#FBE0CC"/>
+  <!-- monitor -->
+  <rect x="58" y="42" width="284" height="184" rx="16" fill="#2B2420"/>
+  <rect x="72" y="56" width="256" height="156" rx="8" fill="#FFFCF6"/>
+  <g stroke="#2B2420" stroke-opacity=".12" stroke-width="2"><path d="M72 108h256M72 160h256M136 56v156M200 56v156M264 56v156"/></g>
+  <path d="M84 150h44l14-34 22 66 22-92 24 70 16-30h86" fill="none" stroke="#C62828" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="84" y="68" width="60" height="10" rx="5" fill="#2B2420" opacity=".7"/>
+  <circle cx="306" cy="76" r="9" fill="#F28C45"/>
+  <rect x="176" y="226" width="48" height="28" fill="#2B2420"/>
+  <rect x="140" y="252" width="120" height="14" rx="7" fill="#2B2420"/>
+  <!-- distintivo de "todo bien" -->
+  <circle cx="330" cy="206" r="34" fill="#F28C45" stroke="#FBE0CC" stroke-width="6"/>
+  <path d="M314 206l11 11 21-24" fill="none" stroke="#2B2420" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

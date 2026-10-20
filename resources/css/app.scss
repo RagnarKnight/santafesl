@@ -1,0 +1,34 @@
+// Único entry point de CSS. Bootstrap 5.3 se importa módulo por módulo
+// (solo lo que el sitio usa) después de aplicar los tokens de marca.
+
+@import 'bootstrap/scss/functions';
+
+@import 'abstracts/variables';
+
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+
+@import 'abstracts/theme';
+
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/utilities';
+
+@import 'bootstrap/scss/root';
+@import 'bootstrap/scss/reboot';
+@import 'bootstrap/scss/type';
+@import 'bootstrap/scss/images';
+@import 'bootstrap/scss/containers';
+@import 'bootstrap/scss/grid';
+@import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/transitions';
+@import 'bootstrap/scss/nav';
+@import 'bootstrap/scss/navbar';
+@import 'bootstrap/scss/card';
+@import 'bootstrap/scss/badge';
+@import 'bootstrap/scss/breadcrumb';
+@import 'bootstrap/scss/helpers';
+@import 'bootstrap/scss/utilities/api';
+
+@import 'base/fonts';
+@import 'components/site';

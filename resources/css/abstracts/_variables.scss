@@ -1,0 +1,75 @@
+// Tokens de marca expresados como variables de Bootstrap.
+// Se importa DESPUÉS de bootstrap/functions y ANTES de bootstrap/variables.
+//
+// Identidad: rojo y blanco sobre fondo crema cálido, texto marrón oscuro.
+// Contrastes medidos (WCAG): texto sobre crema 13,8:1 · secundario sobre crema 5,7:1 ·
+// rojo #C62828 sobre crema 5,4:1 y sobre blanco 5,6:1 · blanco sobre rojo 5,6:1.
+
+$sfsl-night: #231c17; // Marrón muy oscuro: titulares, iconos y trazos.
+$sfsl-cream: #fffaf3;
+$sfsl-sand: #f6ebdc;
+$sfsl-peach: #fdebe3;
+$sfsl-blue: #155eef; // Solo el nombre «SantaFe» del logo y el foco del teclado.
+$sfsl-red: #e53935; // Solo decorativo: 4,23:1 sobre blanco, no cumple AA para texto.
+$sfsl-red-ui: #c62828; // Texto, enlaces y botones.
+$sfsl-warm-white: #ffffff;
+$sfsl-text: #2b2420;
+$sfsl-muted: #6b5f55;
+$sfsl-border: #e6d8c5;
+
+$primary: $sfsl-red-ui;
+$secondary: $sfsl-muted;
+$light: $sfsl-cream;
+$dark: $sfsl-night;
+
+$body-color: $sfsl-text;
+$body-bg: $sfsl-cream;
+$body-secondary-color: $sfsl-muted;
+$border-color: $sfsl-border;
+$link-color: $sfsl-red-ui;
+$link-decoration: underline;
+$headings-color: $sfsl-night;
+$headings-font-weight: 700;
+$headings-line-height: 1.15;
+
+$font-family-sans-serif: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+$font-size-base: 1.0625rem;
+$line-height-base: 1.65;
+$lead-font-size: 1.25rem;
+
+$border-radius: 0.75rem;
+$border-radius-lg: 1.5rem;
+$border-radius-pill: 50rem;
+
+$btn-padding-y: 0.7rem;
+$btn-padding-x: 1.5rem;
+$btn-font-weight: 600;
+$btn-border-radius: $border-radius-pill;
+$btn-border-radius-lg: $border-radius-pill;
+$btn-padding-y-lg: 0.85rem;
+$btn-padding-x-lg: 1.8rem;
+$btn-font-size-lg: 1.1rem;
+
+$card-border-radius: $border-radius-lg;
+$card-border-color: $sfsl-border;
+$card-bg: $sfsl-warm-white;
+$card-spacer-y: 1.5rem;
+$card-spacer-x: 1.5rem;
+
+$navbar-padding-y: 0.75rem;
+$nav-link-color: $sfsl-night;
+$nav-link-hover-color: $sfsl-red-ui;
+$navbar-light-color: $sfsl-night;
+$navbar-light-hover-color: $sfsl-red-ui;
+$navbar-light-active-color: $sfsl-red-ui;
+
+$badge-border-radius: $border-radius-pill;
+
+// Botón de menú: tres rayas rojas (el fondo y el borde se definen en components/_site.scss).
+$navbar-light-toggler-icon-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='#{$sfsl-red-ui}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.4' d='M4 7h22M4 15h22M4 23h22'/></svg>");
+$navbar-light-toggler-border-color: transparent;
+
+$enable-shadows: false;
+$enable-gradients: false;
+$enable-dark-mode: false;
+$enable-negative-margins: false;
