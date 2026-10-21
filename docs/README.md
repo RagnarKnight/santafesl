@@ -13,7 +13,7 @@ Resumen completo, verificaciones y decisiones pendientes: [`CIERRE-V1.md`](CIERR
 - **Laboratorio no se publica**: sin rutas, vistas ni enlaces; sus datos se conservan en `resources/content/projects.php`.
 - Los tres productos figuran como **Terminado**.
 - Contacto: correo y WhatsApp configurados en `.env` (única fuente). Los valores de `.env.example` son **ejemplos**.
-- Marca: sin logo definitivo; favicon provisional; sin imagen Open Graph.
+- Marca: logo "SFSL" de dos tonos en el encabezado, favicon derivado de él (`.ico` y `.png`); sin imagen Open Graph.
 - Requisito de PHP: **^8.4.1** (ver `manual/06-actualizar.md`, sección 7, sobre `composer.lock`).
 
 ## Documentos vigentes (fase de arquitectura)

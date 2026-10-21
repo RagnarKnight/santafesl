@@ -9,7 +9,7 @@ Resumen de lo hecho en el cierre de la v1, tomando como base `santafesl-redesign
 | Laboratorio | Retirado de lo público: rutas, controlador, vistas, menú, menú móvil, pie, portada y sitemap. Los datos (`resources/content/projects.php`) y sus ilustraciones **se conservan** y las pruebas los siguen validando. `/laboratorio` devuelve 404 |
 | Productos | Se agregó el estado **Terminado** y los tres productos lo usan. Las descripciones no cambiaron |
 | Contacto | Correo y WhatsApp salen de **una única fuente** (`.env` → `config/site.php` → `app/Support/SiteContact.php`). Enlace oficial `https://wa.me/<número>?text=…`. Se quitó GitHub del contacto. Los datos de ejemplo se marcan como ejemplo y **no se muestran en producción** |
-| Favicon | `public/favicon.ico` (antes vacío) y `public/favicon.svg` provisionales (cuadrado rojo con "S" blanca), enlazados en el encabezado |
+| Logo y favicon | Con las imágenes entregadas por el autor: logo "SFSL" de **dos tonos** (SF negro, SL rojo) en el encabezado (`storage/app/public/brand/logo.png`, fondo transparente) y favicon cuadrado derivado (SF sobre SL en fondo crema): `public/favicon.ico` (antes vacío) y `public/favicon.png`. Los originales quedan en `resources/brand/` |
 | Pruebas | Corregido el test *risky*; ajustadas las pruebas al nuevo alcance; agregadas pruebas de Laboratorio retirado, estado Terminado, contacto y favicon |
 | `FrontendRulesTest` | El fallo se debe a `resources/views/welcome.blade.php` (vista por defecto de Laravel, con enlaces externos) que existe en tu repositorio y **no está en el paquete v5**. Hay que eliminarla (comando en la sección 5) |
 | PHP | `composer.json` ahora pide `^8.4.1` (lo que exige el lock). `composer.lock` **no se tocó** (ver sección 4) |
@@ -24,7 +24,7 @@ Resumen de lo hecho en el cierre de la v1, tomando como base `santafesl-redesign
 - `app/Content/{Entry,Catalog}.php`, `resources/content/{products,projects}.php`
 - `resources/views/pages/{home,contact}.blade.php`, `resources/views/components/{layouts/app,site/header,site/footer}.blade.php`
 - `resources/css/components/_site.scss`
-- `public/favicon.ico`, `public/favicon.svg`
+- `public/favicon.ico`, `public/favicon.png`, `storage/app/public/brand/logo.png`, `resources/brand/*`
 - `composer.json`
 - `tests/Feature/{PublicPagesTest,ContactPageTest,ContentIntegrityTest,SeoTest,FrontendRulesTest,FaviconTest}.php`
 - `README.md`, `docs/manual/*`, `docs/README.md`, `docs/CIERRE-V1.md`
@@ -35,7 +35,7 @@ Resumen de lo hecho en el cierre de la v1, tomando como base `santafesl-redesign
 
 | Verificación | Resultado | Dónde se ejecutó |
 |---|---|---|
-| Pruebas (`vendor/bin/pest`) | **109 pruebas, 4400 aserciones, 0 fallos, 0 omitidas, ninguna risky** | PHP 8.4 compilado a WebAssembly (no es un PHP nativo) |
+| Pruebas (`vendor/bin/pest`) | **110 pruebas, 4406 aserciones, 0 fallos, 0 omitidas, ninguna risky** | PHP 8.4 compilado a WebAssembly (no es un PHP nativo) |
 | `vendor/bin/pint --test` | 52 archivos, sin observaciones | PHP 8.4 WebAssembly |
 | `npm ci` | Correcto, `package-lock.json` sin cambios | Node 22 |
 | `npm run build` | Correcto, sin avisos | Node 22 |
@@ -94,7 +94,7 @@ Si tu `.env` ya existe, agregale las variables nuevas de contacto (`SITE_CONTACT
 3. **PHP en el servidor:** confirmar que puede usar PHP 8.4.1 o superior. Si no, hay que decidir entre actualizar el servidor o regenerar el lock con versiones anteriores de Symfony, PHPUnit y Pest compatibles con PHP 8.3 (cambio mayor que habría que probar entero).
 4. **Proxy inverso:** si el HTTPS termina en un proxy delante de PHP, hay que aplicar la configuración de confianza descrita en `manual/07-produccion.md`, sección 7 (no está incluida).
 5. **Textos alternativos** de las ilustraciones: dicen "provisional"; reescribirlos cuando existan las definitivas.
-6. **Logo e imagen Open Graph:** no existen; el favicon es provisional. El manual explica cómo incorporarlos (`manual/05-marca.md`).
+6. **Imagen Open Graph** (la que aparece al compartir el enlace): no existe. Si querés, la preparo con el logo; el manual explica cómo incorporarla (`manual/05-marca.md`, sección 4). Confirmá también que el logo de dos tonos y el favicon apilado son los definitivos.
 7. **Herramientas de desarrollo** (`.mcp.json`, `.claude/`, `.agents/`, `boost.json`, `CLAUDE.md`, `AGENTS.md`): siguen en el paquete porque forman parte de tu repositorio. Indicá si querés quitarlas del paquete de despliegue.
 
 ## 7. Limitaciones conocidas

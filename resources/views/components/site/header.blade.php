@@ -8,7 +8,7 @@
 <header class="site-header">
     <nav class="navbar navbar-expand-lg" aria-label="Principal">
         <div class="container">
-            <a class="navbar-brand brand-wordmark" href="{{ route('home') }}" @if (request()->routeIs('home')) aria-current="page" @endif>SantaFe<span class="brand-wordmark__sl">SL</span></a>
+            <a class="navbar-brand" href="{{ route('home') }}" @if (request()->routeIs('home')) aria-current="page" @endif><img class="brand-logo" src="{{ Storage::disk('public')->url('brand/logo.png') }}" alt="{{ config('site.name') }}" width="91" height="32"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu-principal" aria-controls="menu-principal" aria-expanded="false" aria-label="Mostrar u ocultar el menú">
                 <span class="navbar-toggler-icon"></span>
             </button>

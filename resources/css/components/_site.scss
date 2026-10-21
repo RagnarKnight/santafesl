@@ -5,21 +5,10 @@ $sfsl-shadow: 0 6px 18px rgba($sfsl-night, 0.07);
 
 // --- Marca ---------------------------------------------------------------
 
-.brand-wordmark {
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    color: $sfsl-night;
-    text-decoration: none;
-
-    &:hover,
-    &:focus-visible {
-        color: $sfsl-night;
-    }
-}
-
-.brand-wordmark__sl {
-    color: $sfsl-red-ui;
+.brand-logo {
+    display: block;
+    height: 2rem;
+    width: auto;
 }
 
 // --- Foco visible (teclado) ----------------------------------------------

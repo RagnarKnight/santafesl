@@ -4,23 +4,24 @@
 
 | Elemento | Estado |
 |---|---|
-| Nombre | "SantaFeSL", escrito como texto (identificación tipográfica) |
-| Logo definitivo | **No existe todavía.** No se usa ningún logo |
-| Favicon | **Provisional**: un cuadrado rojo con una "S" blanca (`public/favicon.svg` y `public/favicon.ico`) |
+| Nombre | "SantaFeSL" (texto en `config/site.php`, pie de página y metadatos) |
+| Logo | **"SFSL" en dos tonos** (SF negro, SL rojo), entregado por el autor. Se muestra en el encabezado. Archivo: `storage/app/public/brand/logo.png` (640 px de ancho, fondo transparente) |
+| Favicon | Versión cuadrada del mismo logo (SF arriba, SL abajo, sobre fondo crema): `public/favicon.ico` (16, 32 y 48 px) y `public/favicon.png` (192 px). También se usa como icono al guardar el sitio en la pantalla de inicio del teléfono |
+| Imágenes originales del logo | `resources/brand/` (2000 × 2000 px: la versión de dos tonos y la versión toda roja). No se publican; sirven para regenerar el logo y el favicon |
 | Imagen Open Graph (la que aparece al compartir el enlace) | **No existe todavía** |
 | Ilustraciones | Provisionales (ver [Imágenes](03-imagenes.md)) |
 
 ## 1. Cambiar el nombre visible
 
-El nombre aparece en varios lugares, todos con un único origen salvo el logotipo del menú:
-
 | Dónde | Cómo cambiarlo |
 |---|---|
 | Título de las pestañas, pie de página, metadatos | `'name' => 'SantaFeSL'` en `config/site.php` |
 | Variable de Laravel `APP_NAME` | `.env` (`APP_NAME=SantaFeSL`) |
-| Logotipo de texto del menú | `resources/views/components/site/header.blade.php`, en la línea `navbar-brand` (`SantaFe<span class="brand-wordmark__sl">SL</span>`) |
+| Texto alternativo del logo del menú | usa `config('site.name')`: se cambia con el valor anterior |
 | Frase corta (tagline) y descripción general | `config/site.php` (`tagline`, `descriptor`) |
 | Textos que nombran a SantaFeSL | `pages/about.blade.php` y los archivos de contenido |
+
+El logo es una imagen con las letras "SFSL": si cambia el nombre del negocio, hay que cambiar también la imagen (sección 2).
 
 Después de cambiar el nombre, buscá el nombre viejo en todo el proyecto para no dejar restos:
 
@@ -30,40 +31,38 @@ grep -rn "NombreViejo" resources config public app
 
 Y, en producción, regenerá la caché: `php artisan config:cache`.
 
-## 2. Incorporar un logo definitivo
+## 2. Cambiar el logo
 
-1. Guardá el archivo (mejor SVG; también sirve PNG o WebP) en `storage/app/public/brand/logo.svg`. (La carpeta `brand` no existe: crearla.)
-2. En `resources/views/components/site/header.blade.php` reemplazá el contenido de la etiqueta `navbar-brand` por la imagen:
+El logo se muestra en `resources/views/components/site/header.blade.php`:
 
-   ```html
-   <a class="navbar-brand" href="{{ route('home') }}">
-       <img src="{{ Storage::disk('public')->url('brand/logo.svg') }}" alt="SantaFeSL, inicio" width="160" height="40">
-   </a>
-   ```
+```html
+<img class="brand-logo" src="{{ Storage::disk('public')->url('brand/logo.png') }}" alt="{{ config('site.name') }}" width="91" height="32">
+```
 
-   `width` y `height` son el tamaño real que querés mostrar. **No uses `style="..."`**: el sitio no permite estilos en línea. Si necesitás ajustar el tamaño o el alineado, hacelo en `resources/css/components/_site.scss` y ejecutá `npm run build`.
-3. Si el logo ya incluye el nombre, dejá en `alt` el nombre del sitio. Si es solo un símbolo, dejá el texto "SantaFeSL" junto a él.
-4. Revisá el menú en celular y en escritorio, y ejecutá `php artisan test`.
+**Reemplazarlo por otro archivo:**
 
-Hasta que exista el logo definitivo, **no se debe afirmar que existe**: el nombre en texto es la identificación del sitio.
+1. Preparalo con **fondo transparente** (PNG, WebP o SVG), con el doble de ancho del tamaño en pantalla para que se vea nítido en pantallas de alta densidad. Hoy se muestra de 32 px de alto (`2rem`), así que ~640 px de ancho está bien.
+2. Copialo sobre `storage/app/public/brand/logo.png` **con el mismo nombre** (si es otro formato, copialo con su nombre y cambiá `brand/logo.png` en la línea de arriba).
+3. Si cambia la proporción, actualizá `width` y `height` del `<img>` con el tamaño final (alto 32 → ancho = 32 × ancho/alto del logo). **No uses `style="..."`**: el sitio no permite estilos en línea. Para ajustar el tamaño usá la regla `.brand-logo` de `resources/css/components/_site.scss` y ejecutá `npm run build`.
+4. El texto alternativo (`alt`) es el nombre del sitio. Revisá el menú en celular y en escritorio y ejecutá `php artisan test`.
 
-## 3. Reemplazar el favicon
+Los originales (`resources/brand/`) son de 2000 × 2000 px con fondo blanco. Para regenerar el logo transparente hay que quitar el fondo y recortar los márgenes con un editor de imágenes.
 
-El favicon es el iconito de la pestaña del navegador. Hoy hay dos archivos:
+## 3. Cambiar el favicon
+
+El favicon es el iconito de la pestaña del navegador. Hay dos archivos:
 
 | Archivo | Uso |
 |---|---|
-| `public/favicon.svg` | Navegadores modernos (se ve nítido en cualquier tamaño) |
-| `public/favicon.ico` | Navegadores antiguos y atajos (contiene 16, 32 y 48 px) |
+| `public/favicon.ico` | Navegadores en general (contiene 16, 32 y 48 px) |
+| `public/favicon.png` | 192 px: pantallas de alta densidad y icono al agregar el sitio a la pantalla de inicio |
 
 Para cambiarlo:
 
-1. Preparalos con tu logo: un SVG cuadrado y un `.ico` (podés generarlo desde el SVG con cualquier conversor de favicon).
-2. Copialos sobre `public/favicon.svg` y `public/favicon.ico` **con los mismos nombres**. No hay que tocar ninguna vista: el encabezado de cada página (`resources/views/components/layouts/app.blade.php`) ya los enlaza.
+1. Preparalos con tu imagen: un PNG **cuadrado** de 192 px o más y un `.ico` (se genera desde el PNG con cualquier conversor de favicon). Al ser tan pequeño, conviene un diseño simple y con pocas letras: por eso el favicon actual apila "SF" sobre "SL".
+2. Copialos sobre `public/favicon.ico` y `public/favicon.png` **con los mismos nombres**. No hay que tocar ninguna vista: el encabezado de cada página (`resources/views/components/layouts/app.blade.php`) ya los enlaza.
 3. Los navegadores guardan el favicon en caché: probalo con `Ctrl + F5` o en una ventana privada.
 4. Ejecutá `php artisan test --filter=Favicon` (comprueba que existan, que no estén vacíos y que sean válidos).
-
-El SVG no puede contener scripts ni referencias externas.
 
 ## 4. Agregar la imagen Open Graph (para compartir el enlace)
 

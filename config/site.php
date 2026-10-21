@@ -23,7 +23,7 @@ return [
 
     // Ilustración de la portada (provisional). Para cambiarla, reemplazar el archivo o esta ruta.
     'hero' => [
-        'image' => 'illustrations/hero-technology.svg',
+        'image' => 'illustrations/hero-technology.png',
         'alt' => 'Ilustración provisional: un pequeño comercio, una computadora y un teléfono.',
         'width' => 520,
         'height' => 440,

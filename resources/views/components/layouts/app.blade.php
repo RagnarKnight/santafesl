@@ -24,8 +24,9 @@
         <meta property="og:url" content="{{ $canonical }}">
         <meta name="twitter:card" content="summary">
     @endif
-    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="48x48">
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png" sizes="192x192">
+    <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}">
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
 </head>
 <body class="d-flex flex-column min-vh-100">

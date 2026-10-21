@@ -2,7 +2,7 @@
 
 Sitio web público de **SantaFeSL**: programas, servicios y contacto. Hecho con Laravel, Blade, Bootstrap 5, Sass y Vite. Es un sitio de solo lectura: **no tiene base de datos, login, panel, formularios ni cookies**. El contenido está en archivos PHP que se editan a mano.
 
-> **Estado de la versión 1:** el diseño está aprobado y se conserva. La sección *Laboratorio* **no se publica** (sus datos quedan guardados). Los tres productos figuran como *Terminado*. El correo y el WhatsApp del `.env.example` son **ejemplos**: hay que reemplazarlos antes de publicar. Todavía no existe logo definitivo ni imagen para compartir; el favicon es provisional.
+> **Estado de la versión 1:** el diseño está aprobado y se conserva. La sección *Laboratorio* **no se publica** (sus datos quedan guardados). Los tres productos figuran como *Terminado*. El correo y el WhatsApp del `.env.example` son **ejemplos**: hay que reemplazarlos antes de publicar. El logo es "SFSL" en dos tonos y el favicon se derivó de él; todavía no existe imagen para compartir (Open Graph).
 
 ## Requisitos
 

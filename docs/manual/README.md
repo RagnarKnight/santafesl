@@ -17,7 +17,7 @@ Guías para instalar, cambiar y publicar el sitio **sin necesidad de entender to
 - [ ] Reemplazar los datos de contacto de ejemplo ([Contacto](04-contacto.md), sección 6).
 - [ ] Revisar el `.env` de producción: `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL` ([Producción](07-produccion.md), sección 2).
 - [ ] Reescribir los textos alternativos que dicen "provisional" si se cambian las ilustraciones ([Imágenes](03-imagenes.md), sección 4).
-- [ ] Reemplazar el favicon provisional cuando exista el definitivo ([Marca](05-marca.md), sección 3).
+- [ ] Revisar el logo y el favicon actuales y reemplazarlos si cambian ([Marca](05-marca.md), secciones 2 y 3).
 - [ ] Ejecutar `php artisan test` y `npm run build` sin errores.
 - [ ] Repetir las verificaciones de [Producción](07-produccion.md), sección 8.
 
