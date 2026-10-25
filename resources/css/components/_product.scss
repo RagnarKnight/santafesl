@@ -1,0 +1,493 @@
+// --- Ficha de producto ----------------------------------------------------
+
+// Los saltos a #demostracion, #funciones y #consultar no deben quedar pegados al borde.
+.product-section {
+    scroll-margin-top: 1rem;
+}
+
+.product-lead-actions {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+
+    @include media-breakpoint-up(sm) {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
+.product-art {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid $sfsl-border;
+    border-radius: 1.5rem;
+    box-shadow: $sfsl-shadow;
+}
+
+.feature-list {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include media-breakpoint-up(md) {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid $sfsl-border;
+    border-radius: 1rem;
+    background-color: #fff;
+}
+
+.feature-list__tick {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background-color: $sfsl-peach;
+    color: $sfsl-red-ui;
+}
+
+.demo-note {
+    max-width: 66ch;
+    padding: 0.75rem 1rem;
+    border-radius: 0.9rem;
+    background-color: $sfsl-sand;
+}
+
+// --- Video (local o de un proveedor externo) ---------------------------------
+
+.product-video {
+    margin: 0;
+
+    &--vertical {
+        max-width: 20rem;
+    }
+
+    &--horizontal {
+        max-width: 48rem;
+    }
+}
+
+.product-video__media,
+.product-video__embed {
+    display: block;
+    width: 100%;
+    border-radius: 1.25rem;
+    background-color: $sfsl-night;
+    overflow: hidden;
+}
+
+.product-video--horizontal .product-video__media,
+.product-video--horizontal .product-video__embed {
+    aspect-ratio: 16 / 9;
+}
+
+.product-video--vertical .product-video__media,
+.product-video--vertical .product-video__embed {
+    aspect-ratio: 9 / 16;
+}
+
+.product-video__embed {
+    position: relative;
+}
+
+.product-video__poster,
+.product-video__frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.product-video__poster {
+    object-fit: cover;
+}
+
+.product-video__play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border: 0;
+    background: rgba($sfsl-night, 0.25);
+    color: #fff;
+    cursor: pointer;
+
+    // Disco rojo con el triángulo blanco: contraste suficiente sobre cualquier portada.
+    > svg {
+        box-sizing: content-box;
+        padding: 1.1rem 1.1rem 1.1rem 1.35rem;
+        border-radius: 50%;
+        background-color: $sfsl-red-ui;
+    }
+
+    &:focus-visible {
+        outline: 3px solid #fff;
+        outline-offset: -6px;
+    }
+}
+
+.product-video__fallback {
+    position: absolute;
+    inset: auto 1rem 1rem;
+    color: #fff;
+}
+
+// --- Maquetas de interfaz (HTML + CSS; no son capturas reales) ---------------
+
+.mockup {
+    padding: clamp(1rem, 4vw, 2rem);
+    border: 1px solid $sfsl-border;
+    border-radius: 1.5rem;
+    background-color: $sfsl-peach;
+    box-shadow: $sfsl-shadow;
+
+    // Todos los bloques son decorativos: formas sin texto.
+    i,
+    em,
+    b,
+    span,
+    strong {
+        display: block;
+        font-style: normal;
+    }
+}
+
+.mk-window,
+.mk-phone {
+    overflow: hidden;
+    border: 1px solid $sfsl-border;
+    background-color: #fff;
+}
+
+.mk-window {
+    max-width: 44rem;
+    margin-inline: auto;
+    border-radius: 1rem;
+}
+
+.mk-bar {
+    display: flex;
+    gap: 0.35rem;
+    padding: 0.6rem 0.8rem;
+    background-color: $sfsl-sand;
+
+    i {
+        width: 0.6rem;
+        height: 0.6rem;
+        border-radius: 50%;
+        background-color: rgba($sfsl-night, 0.25);
+    }
+}
+
+.mk-body {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.mk-side {
+    display: grid;
+    flex: none;
+    align-content: start;
+    gap: 0.5rem;
+    width: 22%;
+}
+
+.mk-nav {
+    height: 1.6rem;
+    border-radius: 0.5rem;
+    background-color: $sfsl-sand;
+
+    &.is-on {
+        background-color: $sfsl-red-ui;
+    }
+}
+
+.mk-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.mk-title {
+    width: 45%;
+    height: 1.1rem;
+    margin-bottom: 0.9rem;
+    border-radius: 0.35rem;
+    background-color: $sfsl-night;
+}
+
+.mk-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
+    gap: 0.6rem;
+    margin-bottom: 0.9rem;
+}
+
+.mk-card {
+    padding: 0.7rem;
+    border-radius: 0.75rem;
+    background-color: $sfsl-cream;
+    border: 1px solid $sfsl-border;
+
+    span {
+        width: 55%;
+        height: 0.5rem;
+        margin-bottom: 0.5rem;
+        border-radius: 0.25rem;
+        background-color: $sfsl-border;
+    }
+
+    strong {
+        width: 38%;
+        height: 1.2rem;
+        border-radius: 0.3rem;
+        background-color: $sfsl-red-ui;
+    }
+}
+
+.mk-list {
+    display: grid;
+    gap: 0.55rem;
+}
+
+.mk-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.mk-dot {
+    flex: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background-color: $sfsl-peach;
+}
+
+.mk-line {
+    height: 0.55rem;
+    border-radius: 0.3rem;
+    background-color: $sfsl-border;
+}
+
+.mk-w-48 { width: 48%; }
+.mk-w-54 { width: 54%; }
+.mk-w-68 { width: 68%; }
+.mk-w-76 { width: 76%; }
+
+.mk-row .mk-line {
+    flex: 1 1 auto;
+}
+
+.mk-pill {
+    flex: none;
+    width: 2.6rem;
+    height: 0.9rem;
+    margin-left: auto;
+    border-radius: 1rem;
+    background-color: $sfsl-peach;
+}
+
+.mk-tiles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+}
+
+.mk-tile {
+    padding: 0.5rem;
+    border: 1px solid $sfsl-border;
+    border-radius: 0.75rem;
+    background-color: $sfsl-cream;
+}
+
+.mk-img {
+    height: 3rem;
+    margin-bottom: 0.45rem;
+    border-radius: 0.5rem;
+    background-color: $sfsl-peach;
+}
+
+.mk-ticket {
+    display: grid;
+    flex: none;
+    align-content: start;
+    gap: 0.6rem;
+    width: 38%;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    background-color: $sfsl-cream;
+    border: 1px solid $sfsl-border;
+
+    .mk-title {
+        margin-bottom: 0.3rem;
+    }
+}
+
+.mk-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.6rem;
+    border-top: 1px dashed $sfsl-border;
+
+    strong {
+        width: 2.8rem;
+        height: 1rem;
+        border-radius: 0.3rem;
+        background-color: $sfsl-night;
+    }
+}
+
+.mk-button {
+    height: 2rem;
+    border-radius: 0.6rem;
+    background-color: $sfsl-red-ui;
+}
+
+.mk-phone {
+    width: min(100%, 15rem);
+    margin-inline: auto;
+    padding: 0.8rem;
+    border-width: 4px;
+    border-color: $sfsl-night;
+    border-radius: 1.75rem;
+}
+
+.mk-notch {
+    width: 30%;
+    height: 0.4rem;
+    margin: 0 auto 0.8rem;
+    border-radius: 1rem;
+    background-color: $sfsl-night;
+}
+
+.mk-chips {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 0.8rem;
+
+    em {
+        width: 3rem;
+        height: 1.1rem;
+        border-radius: 1rem;
+        background-color: $sfsl-sand;
+
+        &.is-on {
+            background-color: $sfsl-red-ui;
+        }
+    }
+}
+
+.mk-products {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+}
+
+.mk-product {
+    padding: 0.45rem;
+    border: 1px solid $sfsl-border;
+    border-radius: 0.75rem;
+    background-color: $sfsl-cream;
+
+    .mk-line {
+        margin-bottom: 0.4rem;
+    }
+
+    .mk-pill {
+        margin-left: 0;
+        background-color: $sfsl-red-ui;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .mk-side {
+        display: none;
+    }
+
+    .mk-ticket {
+        width: 44%;
+    }
+
+    .mk-tiles {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .mk-tile:nth-child(n + 5) {
+        display: none;
+    }
+}
+
+// --- Capturas reales y módulos (ficha con "screens") ---------------------------
+
+.section--tint {
+    background-color: $sfsl-sand;
+    border-block: 1px solid $sfsl-border;
+}
+
+// Una columna de puntos junto al texto, sin partirlos en dos.
+.feature-list--stack {
+    @include media-breakpoint-up(md) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.screenshot {
+    margin: 0;
+}
+
+.screenshot__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid $sfsl-border;
+    border-radius: 1rem;
+    background-color: #fff;
+    box-shadow: $sfsl-shadow;
+
+    @include media-breakpoint-up(md) {
+        border-radius: 1.25rem;
+    }
+}
+
+.module-card {
+    padding: 1rem;
+    border: 1px solid $sfsl-border;
+    border-radius: 1rem;
+    background-color: #fff;
+}
+
+.module-card__tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: 0.6rem;
+    border-radius: 0.75rem;
+    background-color: $sfsl-peach;
+    color: $sfsl-red-ui;
+}
+
+// El enlace "Ver la imagen completa" es cómodo de tocar en el teléfono.
+.screenshot figcaption a {
+    display: inline-block;
+    padding-block: 0.5rem;
+}

@@ -56,8 +56,11 @@ final class SiteContact
         return $email !== null && in_array(strtolower(substr(strrchr($email, '@'), 1)), self::EXAMPLE_DOMAINS, true);
     }
 
-    /** Enlace directo oficial de WhatsApp (https://wa.me/<número>), o null. */
-    public function whatsappUrl(): ?string
+    /**
+     * Enlace directo oficial de WhatsApp (https://wa.me/<número>?text=…), o null.
+     * Con $message usa ese texto en lugar del mensaje general configurado.
+     */
+    public function whatsappUrl(?string $message = null): ?string
     {
         $digits = $this->digits();
 
@@ -66,8 +69,21 @@ final class SiteContact
         }
 
         $url = 'https://wa.me/'.$digits;
+        $text = filled($message) ? $message : $this->whatsappMessage;
 
-        return filled($this->whatsappMessage) ? $url.'?text='.rawurlencode($this->whatsappMessage) : $url;
+        return filled($text) ? $url.'?text='.rawurlencode($text) : $url;
+    }
+
+    /** Enlace de correo con asunto opcional, o null si no hay correo visible. */
+    public function mailtoUrl(?string $subject = null): ?string
+    {
+        $email = $this->email();
+
+        if ($email === null) {
+            return null;
+        }
+
+        return 'mailto:'.$email.(filled($subject) ? '?subject='.rawurlencode($subject) : '');
     }
 
     /** Es de ejemplo el número documentado o cualquiera que termine en ocho ceros (formato ficticio). */

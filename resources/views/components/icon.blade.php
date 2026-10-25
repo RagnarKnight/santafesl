@@ -47,6 +47,30 @@
         @case('arrow')
             <path d="M5 12h14M13 6l6 6-6 6"/>
             @break
+        @case('users')
+            <circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 5.2a3.2 3.2 0 0 1 0 5.6M18 14.3c2 .8 3.5 2.8 3.5 5.7"/>
+            @break
+        @case('calendar')
+            <rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4M9 15l2 2 4-4"/>
+            @break
+        @case('box')
+            <path d="M3 8l9-5 9 5v9l-9 5-9-5V8zM3 8l9 5 9-5M12 13v9"/>
+            @break
+        @case('heart')
+            <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>
+            @break
+        @case('file')
+            <path d="M7 3h7l5 5v13H7V3zM14 3v5h5M10 13h6M10 17h6"/>
+            @break
+        @case('shield')
+            <path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/>
+            @break
+        @case('check')
+            <path d="M5 12.5l4.5 4.5L19 7.5"/>
+            @break
+        @case('play')
+            <path d="M8 5.5v13l11-6.5-11-6.5z" fill="currentColor"/>
+            @break
         @case('monitor')
             <rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>
             @break

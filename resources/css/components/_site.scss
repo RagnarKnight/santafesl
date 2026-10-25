@@ -227,12 +227,12 @@ a.more-link {
         top: 0;
         right: 0;
         bottom: 0;
-        width: 42%;
+        width: 40%;
         height: 100%;
         object-fit: cover;
-        object-position: right center;
-        -webkit-mask-image: linear-gradient(to right, transparent 35%, #000 80%);
-        mask-image: linear-gradient(to right, transparent 35%, #000 80%);
+        object-position: 72% center;
+        -webkit-mask-image: linear-gradient(to right, transparent 30%, #000 75%);
+        mask-image: linear-gradient(to right, transparent 30%, #000 75%);
     }
 
     .card__tile {
@@ -243,7 +243,7 @@ a.more-link {
 
     .card-body {
         position: relative;
-        padding: 0.9rem 30% 0.9rem 0.75rem;
+        padding: 0.9rem 28% 0.9rem 0.75rem;
     }
 
     .card-title {
@@ -257,7 +257,7 @@ a.more-link {
     }
 
     .more-link {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         color: $sfsl-night;
     }
 

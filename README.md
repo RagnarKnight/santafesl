@@ -35,6 +35,7 @@ Detalle paso a paso: [`docs/manual/01-instalacion.md`](docs/manual/01-instalacio
 | Quiero cambiar… | Archivo | Guía |
 |---|---|---|
 | Un producto (nombre, descripción, estado, imagen) o agregar otro | `resources/content/products.php` | [Contenido](docs/manual/02-contenido.md) |
+| Funciones, botones, video y WhatsApp de un producto | `resources/content/products.php` | [Fichas y videos](docs/manual/08-productos-y-videos.md) |
 | Los servicios | `resources/content/services.php` | [Contenido](docs/manual/02-contenido.md) |
 | Textos de la portada, "Sobre mí" y contacto | `resources/views/pages/*.blade.php` | [Contenido](docs/manual/02-contenido.md) |
 | Títulos y descripciones para buscadores (SEO) | `products.php` y cada vista | [Contenido](docs/manual/02-contenido.md) |

@@ -6,6 +6,9 @@
     <div>
         <h{{ $level }} class="h5 mb-1">{{ $service->name }}</h{{ $level }}>
         <p class="mb-0">{{ $service->short_description }}</p>
+        @if ($details && $service->description)
+            <p class="mt-2 mb-0">{{ $service->description }}</p>
+        @endif
         @if ($details && $service->features !== [])
             <details class="tech-details mt-2">
                 <summary>Ver el detalle técnico</summary>

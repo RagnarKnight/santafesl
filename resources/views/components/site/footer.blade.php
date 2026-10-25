@@ -6,7 +6,8 @@
         <div class="row g-4">
             <div class="col-12 col-md-5">
                 <p class="h5 mb-2">{{ config('site.name') }}</p>
-                <p class="mb-0 text-secondary">{{ config('site.descriptor') }}</p>
+                <p class="mb-2 text-secondary">{{ config('site.descriptor') }}</p>
+                <p class="small mb-0">Me interesa el software libre y la cultura maker: la tecnología se puede entender, adaptar y usar. <a href="{{ route('about') }}">Conocé más sobre mí</a></p>
             </div>
             <div class="col-6 col-md-4">
                 <h2 class="h6">Secciones</h2>

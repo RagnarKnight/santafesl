@@ -104,3 +104,16 @@ Si tu `.env` ya existe, agregale las variables nuevas de contacto (`SITE_CONTACT
 - Los estilos de la sección Laboratorio siguen en el CSS (sin uso) para no tocar el diseño aprobado.
 - Los objetivos táctiles de enlaces del menú y el pie miden 20–22 px de alto (la recomendación WCAG 2.2 es 24 px o separación suficiente); no se modificó para respetar el diseño.
 - No se probó con lector de pantalla real, dispositivos físicos, Safari ni Firefox, ni se ejecutó Lighthouse.
+
+## 8. Mejora de productos, servicios y conversión (fase posterior)
+
+- **Tarjetas:** botones específicos (Ver cómo funciona / Explorar funciones / Ver una demostración), que llevan a la ficha o a su sección. Se ajustó el recorte de las ilustraciones en móvil para que se vea más la interfaz.
+- **Fichas:** problema, público, demostración, funciones y botón de WhatsApp con mensaje por producto. Las funciones son **de referencia** (`features_confirmed = false`): hay que verificarlas.
+- **Demostración:** maquetas HTML/CSS marcadas como no reales y componente de video (local o externo bajo demanda) sin reproductor vacío. Para externos se agregó `video_hosts` en `config/site.php` (vacío por defecto: la CSP no cambia).
+- **Servicios y Sobre mí:** textos centrados en el beneficio, enlace a los programas y sección de software libre y cultura maker (sin datos biográficos nuevos), con una frase en el pie.
+- Guía: [`manual/08-productos-y-videos.md`](manual/08-productos-y-videos.md).
+- Pendiente de tu parte: confirmar las funciones reales, cargar el número real y, cuando existan, los videos.
+
+## 9. Página comercial de CHMS
+
+Ficha con las cuatro capturas reales (panel, consolidación, eventos y tesorería), ocho módulos en tarjetas, espacio para el video (por ahora, la captura del panel con aviso) y cierre con WhatsApp. Los textos se verificaron contra las capturas y la especificación funcional. Pendiente de confirmar: el «fondo común» y las «entregas» de eventos (solo figuran en la captura) y qué datos de las capturas pueden mostrarse. Detalle en [`manual/08-productos-y-videos.md`](manual/08-productos-y-videos.md), sección 7.

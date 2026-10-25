@@ -23,11 +23,15 @@ return [
 
     // Ilustración de la portada (provisional). Para cambiarla, reemplazar el archivo o esta ruta.
     'hero' => [
-        'image' => 'illustrations/hero-technology.png',
+        'image' => 'illustrations/hero-technology1.png',
         'alt' => 'Ilustración provisional: un pequeño comercio, una computadora y un teléfono.',
         'width' => 520,
         'height' => 440,
     ],
+
+    // Dominios desde los que se permite incrustar un video externo (se agregan a la CSP como frame-src).
+    // Vacío = solo videos locales. Ejemplo: ['www.youtube-nocookie.com']. Ver docs/manual/08-productos-y-videos.md
+    'video_hosts' => [],
 
     // Única fuente del contacto. Se cambia en el archivo .env (ver docs/manual/04-contacto.md).
     'contact' => [

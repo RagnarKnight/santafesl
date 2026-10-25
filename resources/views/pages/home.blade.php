@@ -42,7 +42,7 @@
     <section class="section pt-0" aria-labelledby="titulo-servicios">
         <div class="container">
             <h2 id="titulo-servicios" class="section-title mb-3">¿En qué podemos ayudarte?</h2>
-            <p class="mb-4 prose text-secondary">Nos ocupamos de la tecnología para que vos puedas ocuparte de lo tuyo.</p>
+            <p class="mb-4 prose text-secondary">Contanos qué problema tenés: nos ocupamos de la parte técnica para que vos puedas dedicarte a lo tuyo.</p>
             <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
                 @foreach ($services as $service)
                     <div class="col">

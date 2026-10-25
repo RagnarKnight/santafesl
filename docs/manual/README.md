@@ -11,6 +11,7 @@ Guías para instalar, cambiar y publicar el sitio **sin necesidad de entender to
 | 5 | [Marca](05-marca.md) | Nombre, logo, favicon e imagen para compartir |
 | 6 | [Actualizar](06-actualizar.md) | Flujo de cambios, recompilar, pruebas, armar un paquete, requisito de PHP |
 | 7 | [Producción](07-produccion.md) | Variables, permisos, cachés, HTTPS, proxy y verificaciones al publicar |
+| 8 | [Fichas y videos](08-productos-y-videos.md) | Botones, funciones, maquetas, video propio o externo y mensaje de WhatsApp de cada producto |
 
 ## Antes de publicar por primera vez
 

@@ -37,7 +37,12 @@ final readonly class Entry
     /**
      * Iconos propios disponibles (ver resources/views/components/icon.blade.php).
      */
-    public const ICONS = ['church', 'bag', 'grid', 'server', 'wifi', 'code', 'chat', 'flask', 'monitor', 'register', 'globe', 'search', 'gear', 'network', 'wrench'];
+    /** Maquetas de interfaz disponibles (ver resources/views/components/product/mockup.blade.php). */
+    public const MOCKUPS = ['church', 'pos', 'catalog'];
+
+    public const VIDEO_PROVIDERS = ['local', 'embed'];
+
+    public const ICONS = ['church', 'bag', 'grid', 'server', 'wifi', 'code', 'chat', 'flask', 'monitor', 'register', 'globe', 'search', 'gear', 'network', 'wrench', 'users', 'calendar', 'box', 'heart', 'file', 'shield'];
 
     /**
      * @param  list<string>  $features
@@ -60,6 +65,22 @@ final readonly class Entry
         public ?string $seo_title,
         public ?string $seo_description,
         public ?string $icon = null,
+        public ?string $problem = null,
+        public ?string $audience = null,
+        public ?string $cta_label = null,
+        public ?string $cta_anchor = null,
+        public bool $features_confirmed = false,
+        public ?string $inquiry_subject = null,
+        public ?string $inquiry_action = null,
+        public ?string $mockup = null,
+        /** @var array{provider: string, title: string, poster: string, orientation: string, src: ?string, url: ?string, description: ?string}|null */
+        public ?array $video = null,
+        public ?string $headline = null,
+        public ?string $lead = null,
+        /** @var list<array{key: string, image: string, alt: string, width: int, height: int, heading: string, text: string, points: list<string>}> */
+        public array $screens = [],
+        /** @var list<array{name: string, text: string, icon: string}> */
+        public array $modules = [],
     ) {}
 
     /**
@@ -102,6 +123,18 @@ final readonly class Entry
             throw new InvalidArgumentException("[{$type}/{$slug}] Toda imagen necesita image_alt (usar '' si es decorativa).");
         }
 
+        $mockup = $data['mockup'] ?? null;
+
+        if ($mockup !== null && ! in_array($mockup, self::MOCKUPS, true)) {
+            throw new InvalidArgumentException("[{$type}/{$slug}] Maqueta inválida: \"{$mockup}\".");
+        }
+
+        $cta_anchor = $data['cta_anchor'] ?? null;
+
+        if ($cta_anchor !== null && ! preg_match('/^[a-z][a-z0-9-]*$/', $cta_anchor)) {
+            throw new InvalidArgumentException("[{$type}/{$slug}] cta_anchor inválido: \"{$cta_anchor}\" (sin #, solo minúsculas, números y guiones).");
+        }
+
         return new self(
             type: $type,
             slug: $slug,
@@ -119,7 +152,142 @@ final readonly class Entry
             seo_title: $data['seo_title'] ?? null,
             seo_description: $data['seo_description'] ?? null,
             icon: $icon,
+            problem: $data['problem'] ?? null,
+            audience: $data['audience'] ?? null,
+            cta_label: $data['cta_label'] ?? null,
+            cta_anchor: $cta_anchor,
+            features_confirmed: (bool) ($data['features_confirmed'] ?? false),
+            inquiry_subject: $data['inquiry_subject'] ?? null,
+            inquiry_action: $data['inquiry_action'] ?? null,
+            mockup: $mockup,
+            video: self::video($type, $slug, $data['video'] ?? null),
+            headline: $data['headline'] ?? null,
+            lead: $data['lead'] ?? null,
+            screens: self::screens($type, $slug, $data['screens'] ?? []),
+            modules: self::modules($type, $slug, $data['modules'] ?? []),
         );
+    }
+
+    /**
+     * Capturas reales del producto, cada una con su explicación.
+     *
+     * @return list<array{key: string, image: string, alt: string, width: int, height: int, heading: string, text: string, points: list<string>}>
+     */
+    private static function screens(string $type, string $slug, mixed $screens): array
+    {
+        $result = [];
+
+        foreach ((array) $screens as $i => $screen) {
+            foreach (['key', 'image', 'alt', 'heading', 'text'] as $required) {
+                if (! isset($screen[$required]) || ! is_string($screen[$required]) || trim($screen[$required]) === '') {
+                    throw new InvalidArgumentException("[{$type}/{$slug}] Captura #{$i}: falta \"{$required}\".");
+                }
+            }
+
+            if (! isset($screen['width'], $screen['height']) || (int) $screen['width'] < 1 || (int) $screen['height'] < 1) {
+                throw new InvalidArgumentException("[{$type}/{$slug}] Captura \"{$screen['key']}\": faltan width y height.");
+            }
+
+            $result[] = [
+                'key' => $screen['key'],
+                'image' => $screen['image'],
+                'alt' => $screen['alt'],
+                'width' => (int) $screen['width'],
+                'height' => (int) $screen['height'],
+                'heading' => $screen['heading'],
+                'text' => $screen['text'],
+                'points' => array_values($screen['points'] ?? []),
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Otros módulos del producto (tarjetas compactas).
+     *
+     * @return list<array{name: string, text: string, icon: string}>
+     */
+    private static function modules(string $type, string $slug, mixed $modules): array
+    {
+        $result = [];
+
+        foreach ((array) $modules as $module) {
+            if (! isset($module['name'], $module['text']) || ! in_array($module['icon'] ?? null, self::ICONS, true)) {
+                throw new InvalidArgumentException("[{$type}/{$slug}] Módulo inválido: necesita name, text e icon válido.");
+            }
+
+            $result[] = ['name' => $module['name'], 'text' => $module['text'], 'icon' => $module['icon']];
+        }
+
+        return $result;
+    }
+
+    /** Captura de una pantalla por su clave, o null. */
+    public function screen(string $key): ?array
+    {
+        foreach ($this->screens as $screen) {
+            if ($screen['key'] === $key) {
+                return $screen;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Valida el video de un producto. Sin video (null) la ficha muestra la alternativa visual.
+     *
+     * @return array{provider: string, title: string, poster: string, orientation: string, src: ?string, url: ?string, description: ?string}|null
+     */
+    private static function video(string $type, string $slug, mixed $video): ?array
+    {
+        if ($video === null) {
+            return null;
+        }
+
+        if (! is_array($video)) {
+            throw new InvalidArgumentException("[{$type}/{$slug}] \"video\" debe ser un arreglo o null.");
+        }
+
+        $provider = $video['provider'] ?? null;
+
+        if (! in_array($provider, self::VIDEO_PROVIDERS, true)) {
+            throw new InvalidArgumentException("[{$type}/{$slug}] Video: \"provider\" debe ser local o embed.");
+        }
+
+        foreach (['title', 'poster'] as $required) {
+            if (! isset($video[$required]) || ! is_string($video[$required]) || trim($video[$required]) === '') {
+                throw new InvalidArgumentException("[{$type}/{$slug}] Video: falta \"{$required}\".");
+            }
+        }
+
+        $orientation = $video['orientation'] ?? 'horizontal';
+
+        if (! in_array($orientation, ['horizontal', 'vertical'], true)) {
+            throw new InvalidArgumentException("[{$type}/{$slug}] Video: \"orientation\" debe ser horizontal o vertical.");
+        }
+
+        $src = $video['src'] ?? null;
+        $url = $video['url'] ?? null;
+
+        if ($provider === 'local' && (! is_string($src) || trim($src) === '')) {
+            throw new InvalidArgumentException("[{$type}/{$slug}] Video local: falta \"src\".");
+        }
+
+        if ($provider === 'embed' && (! is_string($url) || ! str_starts_with($url, 'https://') || filter_var($url, FILTER_VALIDATE_URL) === false)) {
+            throw new InvalidArgumentException("[{$type}/{$slug}] Video embed: \"url\" debe ser una dirección https válida.");
+        }
+
+        return [
+            'provider' => $provider,
+            'title' => $video['title'],
+            'poster' => $video['poster'],
+            'orientation' => $orientation,
+            'src' => $provider === 'local' ? $src : null,
+            'url' => $provider === 'embed' ? $url : null,
+            'description' => isset($video['description']) && is_string($video['description']) ? $video['description'] : null,
+        ];
     }
 
     /**
@@ -154,6 +322,39 @@ final readonly class Entry
         $parts = preg_split('/\R{2,}/', trim($this->description)) ?: [];
 
         return array_values(array_filter(array_map('trim', $parts), fn (string $p): bool => $p !== ''));
+    }
+
+    /**
+     * Mensaje con el que se abre WhatsApp para consultar por este producto.
+     * Se arma con los datos del propio producto (inquiry_subject / inquiry_action).
+     */
+    public function inquiryMessage(): string
+    {
+        $subject = $this->inquiry_subject ?? $this->name;
+        $action = $this->inquiry_action ?? 'solicitar una demostración';
+
+        return 'Hola, quisiera conocer más sobre '.$subject.' de '.config('site.name').' y '.$action.'.';
+    }
+
+    /** Texto de la llamada a la acción de la tarjeta. */
+    public function ctaLabel(): string
+    {
+        return $this->cta_label ?? 'Conocer más';
+    }
+
+    public function posterUrl(): ?string
+    {
+        return $this->video === null ? null : Storage::disk('public')->url($this->video['poster']);
+    }
+
+    public function pageTitle(): string
+    {
+        return $this->headline ?? $this->name;
+    }
+
+    public function pageLead(): string
+    {
+        return $this->lead ?? $this->short_description;
     }
 
     public function metaTitle(): string

@@ -18,6 +18,24 @@ class SecurityHeaders
         ."img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; "
         ."base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
 
+    /**
+     * La política estricta. Solo si config/site.php lista dominios en 'video_hosts' se agrega
+     * frame-src para esos dominios (videos de un proveedor externo); sin ellos no cambia nada.
+     */
+    public static function policy(): string
+    {
+        $hosts = array_values(array_filter(
+            (array) config('site.video_hosts', []),
+            fn ($host): bool => is_string($host) && preg_match('/^[a-z0-9]([a-z0-9.-]*[a-z0-9])?$/i', $host) === 1,
+        ));
+
+        if ($hosts === []) {
+            return self::CONTENT_SECURITY_POLICY;
+        }
+
+        return self::CONTENT_SECURITY_POLICY.'; frame-src '.implode(' ', array_map(fn (string $h): string => 'https://'.$h, $hosts));
+    }
+
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
@@ -28,7 +46,7 @@ class SecurityHeaders
         $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
 
         if (! app()->environment('local')) {
-            $response->headers->set('Content-Security-Policy', self::CONTENT_SECURITY_POLICY);
+            $response->headers->set('Content-Security-Policy', self::policy());
         }
 
         return $response;
