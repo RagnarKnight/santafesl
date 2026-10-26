@@ -81,6 +81,20 @@ final readonly class Entry
         public array $screens = [],
         /** @var list<array{name: string, text: string, icon: string}> */
         public array $modules = [],
+        public ?string $short_name = null,
+        /** @var array{image: string, alt: string, width: int, height: int}|null */
+        public ?array $hero_image = null,
+        /** @var list<array{type: string, id: string, title: string, lead: ?string, items: list<array{title: ?string, text: string}>, note: ?string}> */
+        public array $intro_sections = [],
+        /** @var list<array{type: string, id: string, title: string, lead: ?string, items: list<array{title: ?string, text: string}>, note: ?string}> */
+        public array $outro_sections = [],
+        public bool $video_placeholder = false,
+        public ?string $cta_title = null,
+        public ?string $cta_text = null,
+        public ?string $cta_button = null,
+        public ?string $explore_label = null,
+        public ?string $explore_anchor = null,
+        public ?string $screens_note = null,
     ) {}
 
     /**
@@ -165,6 +179,17 @@ final readonly class Entry
             lead: $data['lead'] ?? null,
             screens: self::screens($type, $slug, $data['screens'] ?? []),
             modules: self::modules($type, $slug, $data['modules'] ?? []),
+            short_name: $data['short_name'] ?? null,
+            hero_image: self::heroImage($type, $slug, $data['hero_image'] ?? null),
+            intro_sections: self::sections($type, $slug, $data['intro_sections'] ?? []),
+            outro_sections: self::sections($type, $slug, $data['outro_sections'] ?? []),
+            video_placeholder: (bool) ($data['video_placeholder'] ?? false),
+            cta_title: $data['cta_title'] ?? null,
+            cta_text: $data['cta_text'] ?? null,
+            cta_button: $data['cta_button'] ?? null,
+            explore_label: $data['explore_label'] ?? null,
+            explore_anchor: $data['explore_anchor'] ?? null,
+            screens_note: $data['screens_note'] ?? null,
         );
     }
 
@@ -221,6 +246,85 @@ final readonly class Entry
         }
 
         return $result;
+    }
+
+    public const SECTION_TYPES = ['cards', 'steps', 'checks'];
+
+    /**
+     * Imagen principal de la ficha (por ejemplo, un collage del producto).
+     *
+     * @return array{image: string, alt: string, width: int, height: int}|null
+     */
+    private static function heroImage(string $type, string $slug, mixed $hero): ?array
+    {
+        if ($hero === null) {
+            return null;
+        }
+
+        foreach (['image', 'alt'] as $required) {
+            if (! isset($hero[$required]) || ! is_string($hero[$required]) || trim($hero[$required]) === '') {
+                throw new InvalidArgumentException("[{$type}/{$slug}] hero_image: falta \"{$required}\".");
+            }
+        }
+
+        if ((int) ($hero['width'] ?? 0) < 1 || (int) ($hero['height'] ?? 0) < 1) {
+            throw new InvalidArgumentException("[{$type}/{$slug}] hero_image: faltan width y height.");
+        }
+
+        return ['image' => $hero['image'], 'alt' => $hero['alt'], 'width' => (int) $hero['width'], 'height' => (int) $hero['height']];
+    }
+
+    /**
+     * Bloques de texto de la ficha: tarjetas (cards), pasos numerados (steps) o lista con tildes (checks).
+     * En "checks" cada ítem puede ser un texto simple.
+     *
+     * @return list<array{type: string, id: string, title: string, lead: ?string, items: list<array{title: ?string, text: string}>, note: ?string}>
+     */
+    private static function sections(string $type, string $slug, mixed $sections): array
+    {
+        $result = [];
+
+        foreach ((array) $sections as $section) {
+            $kind = $section['type'] ?? null;
+
+            if (! in_array($kind, self::SECTION_TYPES, true)) {
+                throw new InvalidArgumentException("[{$type}/{$slug}] Sección: \"type\" debe ser cards, steps o checks.");
+            }
+
+            if (! isset($section['id'], $section['title']) || ! preg_match('/^[a-z][a-z0-9-]*$/', (string) $section['id'])) {
+                throw new InvalidArgumentException("[{$type}/{$slug}] Sección: necesita \"title\" e \"id\" válido (minúsculas y guiones).");
+            }
+
+            $items = [];
+
+            foreach ((array) ($section['items'] ?? []) as $item) {
+                $item = is_string($item) ? ['text' => $item] : $item;
+
+                if (! isset($item['text']) || ! is_string($item['text']) || trim($item['text']) === '') {
+                    throw new InvalidArgumentException("[{$type}/{$slug}] Sección \"{$section['id']}\": cada ítem necesita \"text\".");
+                }
+
+                if ($kind !== 'checks' && ! isset($item['title'])) {
+                    throw new InvalidArgumentException("[{$type}/{$slug}] Sección \"{$section['id']}\": cada ítem necesita \"title\".");
+                }
+
+                $items[] = ['title' => $item['title'] ?? null, 'text' => $item['text']];
+            }
+
+            if ($items === []) {
+                throw new InvalidArgumentException("[{$type}/{$slug}] Sección \"{$section['id']}\" sin ítems.");
+            }
+
+            $result[] = ['type' => $kind, 'id' => $section['id'], 'title' => $section['title'], 'lead' => $section['lead'] ?? null, 'items' => $items, 'note' => $section['note'] ?? null];
+        }
+
+        return $result;
+    }
+
+    /** Nombre corto para los textos de la ficha (por ejemplo, «CHMS»). */
+    public function brand(): string
+    {
+        return $this->short_name ?? $this->name;
     }
 
     /** Captura de una pantalla por su clave, o null. */

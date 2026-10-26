@@ -17,6 +17,10 @@
     </div>
 </div>
 
+@foreach ($product->intro_sections as $section)
+    @include('pages.products._section', ['section' => $section, 'tint' => false])
+@endforeach
+
 @foreach ($product->screens as $screen)
     <section id="{{ $loop->first ? 'funcionalidades' : $screen['key'] }}" class="section product-section {{ $loop->even ? 'section--tint' : '' }}" aria-labelledby="titulo-{{ $screen['key'] }}">
         <div class="container">
@@ -35,17 +39,21 @@
             </div>
             <figure class="screenshot">
                 <img class="screenshot__img" src="{{ Storage::disk('public')->url($screen['image']) }}" alt="{{ $screen['alt'] }}" width="{{ $screen['width'] }}" height="{{ $screen['height'] }}" @unless ($loop->first) loading="lazy" decoding="async" @endunless>
-                <figcaption class="small text-secondary mt-2">Captura real de CHMS, con datos de ejemplo. <a href="{{ Storage::disk('public')->url($screen['image']) }}">Ver la imagen completa</a></figcaption>
+                <figcaption class="small text-secondary mt-2">Captura real de {{ $product->brand() }}.{{ $product->screens_note ? ' '.$product->screens_note : '' }} <a href="{{ Storage::disk('public')->url($screen['image']) }}">Ver la imagen completa</a></figcaption>
             </figure>
         </div>
     </section>
+@endforeach
+
+@foreach ($product->outro_sections as $section)
+    @include('pages.products._section', ['section' => $section, 'tint' => $loop->even])
 @endforeach
 
 @if ($product->modules !== [])
     <section id="modulos" class="section product-section" aria-labelledby="titulo-modulos">
         <div class="container">
             <h2 id="titulo-modulos" class="section-title mb-3">Y mucho más en un mismo sistema</h2>
-            <p class="prose mb-4">Además de estas cuatro áreas, CHMS tiene otros módulos para el día a día de la iglesia. Cada iglesia tiene sus datos separados, y el sistema tiene modo oscuro y está pensado para usarse desde el celular.</p>
+            <p class="prose mb-4">Además de estas cuatro áreas, {{ $product->brand() }} tiene otros módulos para el día a día de la iglesia. Cada iglesia tiene sus datos separados, y el sistema tiene modo oscuro y está pensado para usarse desde el celular.</p>
             <ul class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 list-unstyled mb-0">
                 @foreach ($product->modules as $module)
                     <li class="col">
@@ -61,17 +69,19 @@
     </section>
 @endif
 
+@if ($product->video || $product->video_placeholder)
 <section id="demostracion" class="section pt-0 product-section" aria-labelledby="titulo-demostracion">
     <div class="container">
-        <h2 id="titulo-demostracion" class="section-title mb-4">{{ $product->video ? 'Mirá CHMS en movimiento' : 'Una demostración en video, próximamente' }}</h2>
+        <h2 id="titulo-demostracion" class="section-title mb-4">{{ $product->video ? 'Mirá '.$product->brand().' en movimiento' : 'Una demostración en video, próximamente' }}</h2>
 
         @if ($product->video)
             <x-product.video :product="$product" />
         @elseif ($dashboard)
             <figure class="screenshot mb-3">
-                <img class="screenshot__img" src="{{ Storage::disk('public')->url($dashboard['image']) }}" alt="Panel principal de CHMS, a la espera del video de demostración." width="{{ $dashboard['width'] }}" height="{{ $dashboard['height'] }}" loading="lazy" decoding="async">
+                <img class="screenshot__img" src="{{ Storage::disk('public')->url($dashboard['image']) }}" alt="Panel principal de {{ $product->brand() }}, a la espera del video de demostración." width="{{ $dashboard['width'] }}" height="{{ $dashboard['height'] }}" loading="lazy" decoding="async">
             </figure>
             <p class="demo-note mb-0">La demostración en video estará disponible próximamente. Mientras tanto, podés pedirnos una demostración y te mostramos el sistema funcionando.</p>
         @endif
     </div>
 </section>
+@endif

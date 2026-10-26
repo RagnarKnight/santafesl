@@ -34,7 +34,7 @@ El visitante no necesita conocimientos técnicos para entender la propuesta.
 |---|---|---|
 | CHMS para iglesias | Sistema de gestión para iglesias | **Por definir** (nombre comercial, funciones reales, estado) |
 | Sistema POS | Punto de venta | **Por definir** |
-| Catálogo web | Catálogo web | **Por definir** (¿es Mercadito WA? ver `05-ROADMAP.md`, decisión D2) |
+| Catálogo web | Catálogo web | Ahora **Pediwa** (resuelto: era el mismo servicio) |
 
 Regla: **no se publica ninguna función, cliente, métrica o precio que el autor no haya confirmado.** Hasta entonces el contenido se escribe con marcas `[POR DEFINIR]` y no se publica.
 
@@ -113,7 +113,7 @@ El camino está descrito en `02-ARQUITECTURA.md` §7 y en `05-ROADMAP.md`.
 
 | Antes | Ahora | Motivo |
 |---|---|---|
-| Primer producto destacado: Mercadito WA | Tres productos: CHMS, POS y catálogo web | Indicación del autor |
+| Primer producto destacado: Mercadito WA | Tres productos: CHMS, POS y Pediwa | Indicación del autor |
 | Zona privada de administración en el alcance | Fuera de v1; fase posterior | Indicación del autor |
 | Base de datos relacional prevista | Sin base de datos hasta que exista necesidad real | Indicación del autor |
 | Font Awesome y «Google Fonts / Inter» | Inter alojada localmente; iconos sin librería (propuesta, D5) | Sin CDN y dependencias mínimas |

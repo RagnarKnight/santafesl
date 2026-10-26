@@ -90,7 +90,7 @@ Si tu `.env` ya existe, agregale las variables nuevas de contacto (`SITE_CONTACT
 ## 6. Decisiones que todavía necesito de vos
 
 1. **Datos reales de contacto:** el correo y el número de WhatsApp definitivos (hoy son ejemplos). Hasta cargarlos en el `.env` del servidor, en producción la página de contacto dice que los canales todavía no están publicados.
-2. **D2:** ¿«Catálogo web» corresponde a otro proyecto tuyo (por ejemplo Mercadito WA)? El sitio no lo nombra.
+2. **D2 (resuelta):** «Catálogo web» es Pediwa; ocupa su lugar y la dirección vieja redirige.
 3. **PHP en el servidor:** confirmar que puede usar PHP 8.4.1 o superior. Si no, hay que decidir entre actualizar el servidor o regenerar el lock con versiones anteriores de Symfony, PHPUnit y Pest compatibles con PHP 8.3 (cambio mayor que habría que probar entero).
 4. **Proxy inverso:** si el HTTPS termina en un proxy delante de PHP, hay que aplicar la configuración de confianza descrita en `manual/07-produccion.md`, sección 7 (no está incluida).
 5. **Textos alternativos** de las ilustraciones: dicen "provisional"; reescribirlos cuando existan las definitivas.
@@ -117,3 +117,7 @@ Si tu `.env` ya existe, agregale las variables nuevas de contacto (`SITE_CONTACT
 ## 9. Página comercial de CHMS
 
 Ficha con las cuatro capturas reales (panel, consolidación, eventos y tesorería), ocho módulos en tarjetas, espacio para el video (por ahora, la captura del panel con aviso) y cierre con WhatsApp. Los textos se verificaron contra las capturas y la especificación funcional. Pendiente de confirmar: el «fondo común» y las «entregas» de eventos (solo figuran en la captura) y qué datos de las capturas pueden mostrarse. Detalle en [`manual/08-productos-y-videos.md`](manual/08-productos-y-videos.md), sección 7.
+
+## 10. Página comercial de Pediwa
+
+Reemplaza a «Catálogo web» (era el mismo servicio; `/productos/catalogo-web` redirige). Página `/productos/pediwa` con collage, rubros, cuatro capturas del panel, flujo en tres pasos, beneficios y cierre con WhatsApp ("Consultar por WhatsApp"). Detalle en [`manual/08-productos-y-videos.md`](manual/08-productos-y-videos.md), sección 8. Pendiente de confirmar: su estado «Terminado» y si el panel guarda pedidos (el panel muestra «Pedidos pendientes» y «Pedidos hoy», pero la ficha no lo afirma).

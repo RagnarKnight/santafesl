@@ -28,10 +28,10 @@ it('responde 200 en la ficha de cada producto publicado', function () {
     }
 });
 
-it('muestra los tres productos publicados con el estado Terminado', function () {
+it('muestra los productos publicados con el estado Terminado', function () {
     $products = app(Catalog::class)->products();
 
-    expect(array_map(fn ($p) => $p->slug, $products))->toBe(['chms-iglesias', 'pos', 'catalogo-web']);
+    expect(array_map(fn ($p) => $p->slug, $products))->toBe(['chms-iglesias', 'pos', 'pediwa']);
 
     foreach ($products as $product) {
         expect($product->statusLabel())->toBe('Terminado');

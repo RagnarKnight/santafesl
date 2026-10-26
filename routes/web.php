@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', HomeController::class)->name('home');
 
 Route::get('/productos', [ProductController::class, 'index'])->name('products.index');
+// «Catálogo web» pasó a llamarse Pediwa: la dirección vieja redirige a la nueva.
+Route::permanentRedirect('/productos/catalogo-web', '/productos/pediwa');
 Route::get('/productos/{slug}', [ProductController::class, 'show'])
     ->where('slug', '[a-z0-9-]+')
     ->name('products.show');

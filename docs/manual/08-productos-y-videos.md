@@ -64,3 +64,14 @@ Si un producto tiene `screens` en `products.php`, su ficha usa el formato de cap
 - Cada captura necesita un texto alternativo (`alt`) que describa lo que se ve.
 - **Video de CHMS:** completá `'video' => [...]` en ese producto como en la sección 6. Al existir, la sección "Una demostración en video, próximamente" (con la captura del panel) pasa a mostrar el reproductor, con el título "Mirá CHMS en movimiento". No hay que tocar ninguna vista.
 - Los textos de las capturas y de `modules` se verificaron contra las capturas reales y la especificación funcional de CHMS. Excepción: el «fondo común» y las «entregas» de los eventos figuran en la captura pero no en la especificación; confirmá que sigan vigentes.
+
+## 8. Pediwa y los bloques de texto
+
+Pediwa usa el mismo formato de capturas que CHMS, más estos campos opcionales de `products.php`:
+
+- `hero_image`: imagen principal bajo el título (el collage de cinco celulares). Se muestra completa y con sus proporciones; en el celular se desliza dentro de su marco para que los catálogos se lean.
+- `intro_sections` y `outro_sections`: bloques antes y después de las capturas. Cada uno tiene `type` (`cards`: tarjetas con título; `steps`: pasos numerados; `checks`: lista con tildes), `id`, `title`, `lead`, `items` y `note` (opcionales).
+- `cta_title`, `cta_text`, `cta_button`, `explore_label`, `explore_anchor`, `short_name` y `screens_note`: textos de los botones, del cierre y de los pies de imagen.
+- Imágenes en `storage/app/public/products/pediwa/` (`pediwa-catalogos.webp`, `pediwa-panel.webp`, `pediwa-productos.webp`, `pediwa-banners.webp`, `pediwa-categorias.webp` y la versión chica `pediwa-catalogos-tarjeta.webp` para la tarjeta). Las capturas del panel son las originales, solo convertidas a WebP; el collage se redujo de 3767 a 2000 px de ancho.
+
+Pediwa es el antiguo «Catálogo web»: ocupa su lugar en la lista y la dirección vieja `/productos/catalogo-web` redirige a `/productos/pediwa` (redirección permanente en `routes/web.php`).

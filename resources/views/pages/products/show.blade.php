@@ -4,13 +4,20 @@
             <p class="mt-3 mb-0"><x-status-badge :label="$product->statusLabel()" /></p>
         @endif
         <div class="product-lead-actions">
-            <x-product.contact-button :product="$product" />
+            <x-product.contact-button :product="$product" :label="$product->cta_button ?? 'Solicitar una demostración'" />
             @if ($product->screens !== [])
-                <a class="btn btn-outline-primary btn-lg" href="#funcionalidades">Explorar las funcionalidades</a>
+                <a class="btn btn-outline-primary btn-lg" href="#{{ $product->explore_anchor ?? 'funcionalidades' }}">{{ $product->explore_label ?? 'Explorar las funcionalidades' }}</a>
             @elseif ($product->features !== [])
                 <a class="btn btn-outline-primary btn-lg" href="#funciones">Ver las funciones</a>
             @endif
         </div>
+        @if ($product->hero_image)
+            {{-- En el celular el collage se ve más grande y se desliza dentro de su marco (la página no se desplaza). --}}
+            <figure class="hero-shot" tabindex="0" role="group" aria-label="{{ $product->brand() }}: catálogos de ejemplo. Deslizá para ver todos.">
+                <img class="hero-shot__img" src="{{ Storage::disk('public')->url($product->hero_image['image']) }}" alt="{{ $product->hero_image['alt'] }}" width="{{ $product->hero_image['width'] }}" height="{{ $product->hero_image['height'] }}" fetchpriority="high">
+            </figure>
+            <p class="small text-secondary d-md-none mt-2 mb-0">Deslizá la imagen para ver los cinco catálogos.</p>
+        @endif
     </x-page-header>
 
     @if ($product->screens !== [])
@@ -104,10 +111,10 @@
             <div class="cta-card">
                 <span class="cta-card__icon" aria-hidden="true"><x-icon name="chat" :size="26" /></span>
                 <div class="cta-card__text">
-                    <h2 id="titulo-consultar" class="h4 mb-1">{{ $product->screens !== [] ? '¿Querés conocer CHMS en funcionamiento?' : '¿Querés conocer este programa?' }}</h2>
-                    <p class="mb-0">{{ $product->screens !== [] ? 'Contanos qué necesita tu iglesia y coordinamos una demostración para que conozcas cómo funciona el sistema.' : 'Escribime y coordinamos una demostración, sin compromiso.' }}</p>
+                    <h2 id="titulo-consultar" class="h4 mb-1">{{ $product->cta_title ?? '¿Querés conocer este programa?' }}</h2>
+                    <p class="mb-0">{{ $product->cta_text ?? 'Escribime y coordinamos una demostración, sin compromiso.' }}</p>
                 </div>
-                <x-product.contact-button :product="$product" class="btn-light" />
+                <x-product.contact-button :product="$product" class="btn-light" :label="$product->cta_button ?? 'Solicitar una demostración'" />
             </div>
             @php($contact = \App\Support\SiteContact::fromConfig())
             @if ($contact->whatsappIsExample() && $contact->whatsappUrl($product->inquiryMessage()))

@@ -26,7 +26,7 @@ Decisiones resueltas por el autor: D1 (aprobada, con una sola clase `Entry`), D3
 | ID | Decisión | Propuesta | Alternativa | Bloquea |
 |---|---|---|---|---|
 | **D1** | Contenido en `resources/content/*.php` + clase `Catalog` (arquitectura §5) | Aprobar | Datos en Blade (descartado) | Fase 2 |
-| **D2** | ¿El «catálogo web» es Mercadito WA? Los docs previos lo describían como «punto de venta simple», lo que se solapa con el POS | Confirmar nombres comerciales y descripción de los 3 productos | — | Contenido (Fase 2) |
+| **D2 (resuelta: es Pediwa)** | ¿El «catálogo web» es Mercadito WA? Los docs previos lo describían como «punto de venta simple», lo que se solapa con el POS | Confirmar nombres comerciales y descripción de los 3 productos | — | Contenido (Fase 2) |
 | **D3** | ¿Entran en v1 `/sobre-mi` y `/laboratorio`? Están en los docs previos, no en el pedido actual | Solo Inicio, Productos, Servicios y Contacto | Sumar páginas | Navegación (Fase 1) |
 | **D4** | Contacto sin formulario | Enlaces `mailto:`, WhatsApp y GitHub | Formulario (exige correo saliente, antispam, política de datos) | Contenido |
 | **D5** | Dependencias: agregar `bootstrap`, `sass`, `@fontsource/inter`; quitar `tailwindcss`, `@tailwindcss/vite` y `bunny()`; **iconos sin librería** (SVG inline). El brief de marca nombra Font Awesome | Aprobar | Mantener Font Awesome (más peso, otra dependencia); no usar `sass` (personalizar con `--bs-*`) | Fase 1 |

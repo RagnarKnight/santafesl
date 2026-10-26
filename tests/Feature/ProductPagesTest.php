@@ -12,7 +12,7 @@ const REAL_NUMBER = '5491155550123';
 dataset('whatsapp messages', [
     'iglesias' => ['chms-iglesias', 'Hola, quisiera conocer más sobre el sistema CHMS para iglesias de SantaFeSL y solicitar una demostración.'],
     'caja' => ['pos', 'Hola, quisiera conocer más sobre el sistema de caja de SantaFeSL y solicitar una demostración.'],
-    'catálogo' => ['catalogo-web', 'Hola, quisiera conocer más sobre el catálogo web de SantaFeSL y consultar cómo podría implementarlo para mi negocio.'],
+    'pediwa' => ['pediwa', 'Hola, quisiera conocer más sobre Pediwa de SantaFeSL y consultar cómo podría usarlo en mi negocio.'],
 ]);
 
 function product(array $extra = []): Entry
@@ -90,7 +90,7 @@ it('marca el número de ejemplo fuera de producción', function () {
 it('usa llamadas a la acción específicas en las tarjetas y no «Conocer más»', function () {
     $html = $this->get(route('products.index'))->assertOk()->getContent();
 
-    expect($html)->toContain('Ver cómo funciona')->toContain('Explorar funciones')->toContain('Ver una demostración')
+    expect($html)->toContain('Ver cómo funciona')->toContain('Explorar funciones')
         ->and($html)->not->toContain('Conocer más');
 
     $home = $this->get(route('home'))->getContent();
@@ -103,10 +103,11 @@ it('lleva cada llamada a la acción a su ficha o a su sección y esa sección ex
     expect($index)
         ->toContain('href="'.route('products.show', 'chms-iglesias').'#funcionalidades"')
         ->toContain('href="'.route('products.show', 'pos').'#funciones"')
-        ->toContain('href="'.route('products.show', 'catalogo-web').'#demostracion"');
+        ->toContain('href="'.route('products.show', 'pediwa').'#como-funciona"')
+        ->not->toContain('catalogo-web');
 
     $this->get(route('products.show', 'pos'))->assertSee('id="funciones"', false);
-    $this->get(route('products.show', 'catalogo-web'))->assertSee('id="demostracion"', false);
+    $this->get(route('products.show', 'pediwa'))->assertSee('id="como-funciona"', false);
 });
 
 it('presenta cada producto con problema, público, funciones y demostración', function (string $slug) {
@@ -126,7 +127,7 @@ it('presenta cada producto con problema, público, funciones y demostración', f
     // Un solo h1 y jerarquía sin saltos.
     $html = $page->getContent();
     expect(substr_count($html, '<h1'))->toBe(1);
-})->with(['pos', 'catalogo-web']);
+})->with(['pos']);
 
 it('avisa que las funciones son orientativas mientras no estén confirmadas', function () {
     $this->get(route('products.show', 'pos'))
@@ -143,7 +144,7 @@ it('sin video muestra la maqueta como ilustración conceptual y no un reproducto
         ->getContent();
 
     expect($html)->not->toContain('<video')->not->toContain('<iframe')->not->toContain('product-video');
-})->with(['pos', 'catalogo-web']);
+})->with(['pos']);
 
 it('las maquetas no usan estilos en línea ni imágenes externas', function (string $type) {
     $html = Blade::render('<x-product.mockup :type="$type" />', ['type' => $type]);
@@ -386,3 +387,88 @@ it('rechaza capturas y módulos mal definidos', function (array $extra) {
     'captura sin tamaño' => [['screens' => [['key' => 'a', 'image' => 'x.webp', 'alt' => 'a', 'heading' => 'h', 'text' => 't']]]],
     'módulo con icono inexistente' => [['modules' => [['name' => 'M', 'text' => 't', 'icon' => 'nada']]]],
 ]);
+
+// --- Pediwa: ficha con collage, capturas del panel y pasos --------------------
+
+it('presenta Pediwa con su título, descripción y los dos botones pedidos', function () {
+    config(['site.contact.whatsapp' => REAL_NUMBER]);
+
+    $html = $this->get(route('products.show', 'pediwa'))->assertOk()
+        ->assertSee('Tu catálogo digital, listo para vender por WhatsApp.')
+        ->assertSee('recibí pedidos por WhatsApp')
+        ->assertSee('Consultar por WhatsApp')
+        ->assertSee('Conocer cómo funciona')
+        ->assertSee('href="#como-funciona"', false)
+        ->assertSee('<title>Pediwa: catálogo digital para vender por WhatsApp · SantaFeSL</title>', false)
+        ->getContent();
+
+    expect(substr_count($html, '<h1'))->toBe(1);
+});
+
+it('muestra el collage y las cuatro capturas con sus proporciones originales', function () {
+    $product = app(Catalog::class)->product('pediwa');
+
+    expect(array_column($product->screens, 'key'))->toBe(['panel', 'productos', 'banners', 'categorias']);
+
+    $files = [$product->hero_image, ...$product->screens];
+    $html = $this->get(route('products.show', 'pediwa'))->getContent();
+
+    foreach ($files as $file) {
+        $path = Storage::disk('public')->path($file['image']);
+        [$w, $h] = getimagesize($path);
+
+        expect([$w, $h])->toBe([$file['width'], $file['height']])
+            ->and(strlen($file['alt']))->toBeGreaterThan(40)
+            ->and($html)->toContain('alt="'.e($file['alt']).'"')->toContain('width="'.$file['width'].'" height="'.$file['height'].'"');
+    }
+});
+
+it('explica el flujo en tres pasos y aclara que no es una tienda con pagos', function () {
+    $this->get(route('products.show', 'pediwa'))
+        ->assertSee('id="como-funciona"', false)
+        ->assertSee('El cliente explora el catálogo')->assertSee('Arma su carrito')->assertSee('Envía el pedido por WhatsApp')
+        ->assertSee('no es una tienda online con pagos integrados')
+        ->assertSee('El comerciante continúa la venta manualmente');
+});
+
+it('no promete resultados comerciales ni funciones no verificadas', function () {
+    $html = strtolower(strip_tags($this->get(route('products.show', 'pediwa'))->getContent()));
+
+    foreach (['multiplic', 'duplic', '24 horas', 'automáticamente', 'garantiz', 'testimonio', 'pasarela', 'mercado pago', 'se guardan'] as $banned) {
+        expect($html)->not->toContain($banned);
+    }
+});
+
+it('lista los cinco rubros de los catálogos de ejemplo', function () {
+    $this->get(route('products.show', 'pediwa'))
+        ->assertSee('id="rubros"', false)
+        ->assertSee('Kioscos y almacenes')->assertSee('Indumentaria')->assertSee('Comida')->assertSee('Frutas y verduras')->assertSee('Tecnología');
+});
+
+it('Pediwa usa el contacto central y no muestra video vacío', function () {
+    config(['site.contact.whatsapp' => null, 'site.contact.email' => null]);
+
+    $html = $this->get(route('products.show', 'pediwa'))
+        ->assertDontSee('wa.me', false)
+        ->assertSee('href="'.route('contact').'"', false)
+        ->assertSee('Empezá a mostrar tu negocio de otra manera.')
+        ->getContent();
+
+    expect($html)->not->toContain('<video')->not->toContain('estará disponible próximamente');
+});
+
+it('rechaza secciones mal definidas', function (array $extra) {
+    product($extra);
+})->throws(InvalidArgumentException::class)->with([
+    'tipo inválido' => [['intro_sections' => [['type' => 'otra', 'id' => 'a', 'title' => 't', 'items' => ['x']]]]],
+    'sin ítems' => [['intro_sections' => [['type' => 'checks', 'id' => 'a', 'title' => 't', 'items' => []]]]],
+    'tarjeta sin título' => [['outro_sections' => [['type' => 'cards', 'id' => 'a', 'title' => 't', 'items' => [['text' => 'x']]]]]],
+    'collage sin tamaño' => [['hero_image' => ['image' => 'x.webp', 'alt' => 'a']]],
+]);
+
+it('la dirección vieja del «Catálogo web» redirige a Pediwa y ya no figura entre los programas', function () {
+    $this->get('/productos/catalogo-web')->assertRedirect('/productos/pediwa')->assertStatus(301);
+
+    expect(array_map(fn ($p) => $p->slug, app(Catalog::class)->products()))->not->toContain('catalogo-web');
+    $this->get(route('products.index'))->assertDontSee('Catálogo web');
+});

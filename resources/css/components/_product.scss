@@ -491,3 +491,69 @@
     display: inline-block;
     padding-block: 0.5rem;
 }
+
+// --- Imagen principal de la ficha (collage) ---------------------------------
+
+.hero-shot {
+    margin: 1.75rem 0 0;
+}
+
+// Se muestra completa y con sus proporciones: nunca se recorta ni se estira.
+.hero-shot__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+// En pantallas angostas los cinco celulares serían diminutos: la imagen conserva un ancho
+// legible y se desliza dentro de su marco, sin ensanchar la página.
+@include media-breakpoint-down(md) {
+    .hero-shot {
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        border-radius: 1rem;
+    }
+
+    .hero-shot__img {
+        width: 52rem;
+        max-width: none;
+    }
+}
+
+// --- Pasos numerados ----------------------------------------------------------
+
+.step-list {
+    display: grid;
+    gap: 1rem;
+    padding: 0;
+    counter-reset: none;
+
+    @include media-breakpoint-up(md) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.step-list__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.1rem;
+    border: 1px solid $sfsl-border;
+    border-radius: 1.25rem;
+    background-color: #fff;
+    box-shadow: $sfsl-shadow;
+}
+
+.step-list__number {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: $sfsl-red-ui;
+    color: #fff;
+    font-weight: 700;
+}

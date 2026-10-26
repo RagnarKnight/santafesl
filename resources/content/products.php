@@ -22,10 +22,14 @@
 |   headline, lead               Título (h1) y bajada propios de la ficha (opcionales)
 |   screens, modules             Capturas reales (con su texto) y tarjetas de otros módulos. Con screens la ficha
 |                                usa el formato de «showcase». Ver docs/manual/08-productos-y-videos.md
+|   short_name, cta_title, cta_text, cta_button, explore_label, explore_anchor, screens_note, video_placeholder
+|                                Textos y opciones de la ficha con capturas (todos opcionales)
+|   hero_image                   Imagen principal bajo el título (collage del producto)
+|   intro_sections, outro_sections  Bloques de texto antes y después de las capturas (cards, steps o checks)
 |   video                        null mientras no exista un video real. Ver docs/manual/08-productos-y-videos.md
 |
 | Estados válidos: development, beta, production, completed, paused, archived.
-| Los tres productos publicados figuran como "Terminado" (completed).
+| Los productos publicados figuran como "Terminado" (completed).
 | published_at: null = borrador; fecha (Y-m-d) pasada o actual = publicado.
 |
 */
@@ -38,7 +42,7 @@ return [
         'headline' => 'CHMS: la gestión de tu iglesia, más organizada',
         'lead' => 'Organizá la información de los miembros, acompañá su proceso de consolidación, gestioná eventos y mantené un seguimiento claro de la tesorería desde un mismo sistema.',
         'description' => "Es un sistema de gestión pensado para iglesias.\n\nTambién se lo conoce como CHMS, que son las siglas en inglés de «sistema de gestión para iglesias».",
-        'status' => 'production',
+        'status' => 'completed',
         'icon' => 'church',
         'image_path' => 'illustrations/product-church.png',
         'image_alt' => 'Ilustración provisional: un salón comunitario junto a una lista de tareas y tres personas reunidas.',
@@ -57,6 +61,11 @@ return [
         // Verificado contra las capturas reales y la especificación funcional de CHMS (Eventos: «fondo común» y «entregas» figuran solo en la captura).
         'features_confirmed' => true,
         'inquiry_subject' => 'el sistema CHMS para iglesias',
+        'short_name' => 'CHMS',
+        'video_placeholder' => true,
+        'screens_note' => 'Los datos que se ven son de ejemplo.',
+        'cta_title' => '¿Querés conocer CHMS en funcionamiento?',
+        'cta_text' => 'Contanos qué necesita tu iglesia y coordinamos una demostración para que conozcas cómo funciona el sistema.',
         'mockup' => null,
         'video' => null,
         // Capturas reales de CHMS (storage/app/public/products/chms/). Ver docs/manual/08-productos-y-videos.md.
@@ -74,8 +83,6 @@ return [
                     'Indicadores de total de personas, nuevas visitas y miembros activos.',
                     'Gráfico y resumen del proceso de consolidación por etapa.',
                     'Balance de tesorería a la vista.',
-                    'Los cumpleaños del Mes.',
-                    'Peticiones pendientes en el muro de oración.',
                 ],
             ],
             [
@@ -145,7 +152,7 @@ return [
         'name' => 'Sistema de caja',
         'short_description' => 'Un programa para cobrar y registrar las ventas de un negocio.',
         'description' => "Es un sistema de punto de venta: el programa que se usa en la caja de un negocio.\n\nTambién se lo conoce como POS, por las siglas en inglés de «punto de venta».",
-        'status' => 'production',
+        'status' => 'completed',
         'icon' => 'register',
         'image_path' => 'illustrations/product-pos.png',
         'image_alt' => 'Ilustración provisional: un pequeño comercio con una pantalla de ventas.',
@@ -170,33 +177,147 @@ return [
         'published_at' => '2026-10-16',
     ],
     [
-        'slug' => 'catalogo-web',
-        'name' => 'Catálogo web',
-        'short_description' => 'Una página para mostrar los productos de un negocio.',
-        'description' => 'Es un catálogo de productos para la web.',
-        'status' => 'production',
-        'icon' => 'globe',
-        'image_path' => 'illustrations/product-catalog.png',
-        'image_alt' => 'Ilustración provisional: una página web y un teléfono mostrando productos de una tienda.',
-        'seo_title' => 'Catálogo web de productos para tu negocio',
-        'seo_description' => 'Conocé el catálogo web de SantaFeSL: una página para mostrar los productos de tu negocio, con categorías, imágenes y precios, desde el celular. Pedí una demostración.',
-        'cta_label' => 'Ver una demostración',
-        'cta_anchor' => 'demostracion',
-        'problem' => 'Mostrar los productos solo con mensajes o fotos sueltas es poco práctico para quien quiere elegir y para quien tiene que responder una y otra vez.',
-        'audience' => 'Negocios que quieren que sus clientes vean sus productos desde el teléfono o la computadora.',
+        'slug' => 'pediwa',
+        'name' => 'Pediwa',
+        'short_name' => 'Pediwa',
+        'short_description' => 'Un catálogo digital para vender por WhatsApp.',
+        'headline' => 'Tu catálogo digital, listo para vender por WhatsApp.',
+        'lead' => 'Mostrá tus productos, organizá tu catálogo y recibí pedidos por WhatsApp. Una forma sencilla de digitalizar tu kiosco, almacén o pequeño comercio.',
+        'description' => 'Es un catálogo digital para kioscos, almacenes y pequeños comercios. Tus clientes ven los productos, arman su pedido y lo envían por WhatsApp.',
+        'status' => 'completed',
+        'icon' => 'bag',
+        'image_path' => 'illustrations/product-pediwa.png',
+        'image_alt' => 'Cinco celulares con catálogos de ejemplo hechos con Pediwa: comida, indumentaria, kiosco, verdulería y tecnología.',
+        'seo_title' => 'Pediwa: catálogo digital para vender por WhatsApp',
+        'seo_description' => 'Pediwa es un catálogo digital para kioscos, almacenes y pequeños comercios: mostrás tus productos y tus clientes arman el pedido y lo envían por WhatsApp.',
+        'cta_label' => 'Ver cómo funciona',
+        'cta_anchor' => 'como-funciona',
+        'problem' => 'Mostrar los productos con fotos sueltas y tomar cada pedido mensaje por mensaje lleva tiempo.',
+        'audience' => 'Kioscos, almacenes y pequeños comercios argentinos.',
         'features' => [
-            'Presentación de los productos del negocio',
-            'Organización por categorías',
-            'Imágenes y precios a la vista',
-            'Acceso cómodo desde el teléfono',
+            'Catálogo de productos con categorías y búsqueda',
+            'Ofertas y productos destacados',
+            'Carrito del cliente y pedido por WhatsApp',
+            'Panel para administrar productos, categorías y banners',
         ],
-        'features_confirmed' => false,
-        'inquiry_subject' => 'el catálogo web',
-        'inquiry_action' => 'consultar cómo podría implementarlo para mi negocio',
-        'mockup' => 'catalog',
+        'features_confirmed' => true,
+        'inquiry_subject' => 'Pediwa',
+        'inquiry_action' => 'consultar cómo podría usarlo en mi negocio',
+        'cta_button' => 'Consultar por WhatsApp',
+        'cta_title' => 'Empezá a mostrar tu negocio de otra manera.',
+        'cta_text' => 'Conocé Pediwa y descubrí cómo presentar tus productos en un catálogo digital sencillo para tus clientes.',
+        'explore_label' => 'Conocer cómo funciona',
+        'explore_anchor' => 'como-funciona',
+        'mockup' => null,
         'video' => null,
+        'hero_image' => [
+            'image' => 'products/pediwa/pediwa-catalogos.webp',
+            'alt' => 'Cinco celulares con catálogos de ejemplo hechos con Pediwa: una comida rápida (Sabor Express), una tienda de ropa (Boutique Elegance), un kiosco (Kiosco El Rincón), una verdulería (Verdulería La Huerta) y una tienda de tecnología (TecnoStore).',
+            'width' => 2000,
+            'height' => 810,
+        ],
+        'intro_sections' => [
+            [
+                'type' => 'cards',
+                'id' => 'rubros',
+                'title' => 'Un catálogo para tu tipo de negocio',
+                'lead' => 'Los celulares de arriba son catálogos de ejemplo de distintos rubros. Cada comercio arma el suyo con sus propios productos y categorías.',
+                'items' => [
+                    ['title' => 'Kioscos y almacenes', 'text' => 'Categorías como Almacén, Bebidas, Lácteos y Limpieza, con productos en oferta.'],
+                    ['title' => 'Indumentaria', 'text' => 'Categorías como Remeras, Pantalones, Camperas y Accesorios.'],
+                    ['title' => 'Comida', 'text' => 'Categorías como Pizzas, Milanesas, Sandwiches y Pastas.'],
+                    ['title' => 'Frutas y verduras', 'text' => 'Categorías como Frutas y Verduras, y una sección de Ofertas.'],
+                    ['title' => 'Tecnología', 'text' => 'Categorías como Computación, Celulares, Electrodomésticos y Accesorios.'],
+                ],
+            ],
+        ],
+        'screens' => [
+            [
+                'key' => 'panel',
+                'image' => 'products/pediwa/pediwa-panel.webp',
+                'alt' => 'Captura real del panel de control de Pediwa: indicadores de productos, disponibles, sin stock, ofertas, destacados y pausados, visitas y clics en WhatsApp del día, y un gráfico de actividad de los últimos 7 días.',
+                'width' => 1349,
+                'height' => 580,
+                'heading' => 'Un panel para ver cómo va tu catálogo',
+                'text' => 'El panel de control muestra los indicadores del catálogo y da acceso a las secciones de administración.',
+                'points' => [
+                    'Indicadores de productos: total, disponibles, sin stock, en oferta, destacados y pausados.',
+                    'Visitas y clics en WhatsApp del día, con un gráfico de la actividad de los últimos 7 días.',
+                    'Menú lateral para entrar a Productos, Categorías, Banners, Configuración y Usuarios, y un enlace para ver el catálogo.',
+                ],
+            ],
+            [
+                'key' => 'productos',
+                'image' => 'products/pediwa/pediwa-productos.webp',
+                'alt' => 'Captura real de la administración de productos de Pediwa: una tabla con la foto, el nombre, la categoría y el precio de cada producto, una oferta con su descuento, y botones para stock, destacado, pausa, edición y borrado.',
+                'width' => 1349,
+                'height' => 578,
+                'heading' => 'Tus productos y precios, siempre al día',
+                'text' => 'Una tabla reúne todos los productos con su foto, su categoría y su precio.',
+                'points' => [
+                    'Las ofertas muestran el precio de oferta y el porcentaje de descuento, y se pueden desactivar.',
+                    'Con un botón se controla si el producto tiene stock, si es destacado y si está pausado.',
+                    'Cada producto se puede editar o eliminar.',
+                ],
+            ],
+            [
+                'key' => 'banners',
+                'image' => 'products/pediwa/pediwa-banners.webp',
+                'alt' => 'Captura real de la administración de banners de Pediwa: una lista de cuatro banners con su imagen, título y estado, y un formulario para crear uno nuevo con título opcional e imagen.',
+                'width' => 1348,
+                'height' => 582,
+                'heading' => 'Administrá los banners de tu catálogo',
+                'text' => 'Desde esta pantalla se cargan, se pausan y se eliminan los banners.',
+                'points' => [
+                    'La lista muestra la imagen, el título y el estado de cada banner.',
+                    'Para crear uno se carga una imagen (JPG, PNG o WebP, de hasta 4 MB) y, si se quiere, un título.',
+                    'Se recomienda una imagen horizontal, por ejemplo de 1200 × 600.',
+                ],
+            ],
+            [
+                'key' => 'categorias',
+                'image' => 'products/pediwa/pediwa-categorias.webp',
+                'alt' => 'Captura real de la administración de categorías de Pediwa: una lista con el ícono, el nombre, la cantidad de productos y el estado de cada categoría, y un formulario para crear una nueva con ícono emoji y nombre.',
+                'width' => 1338,
+                'height' => 578,
+                'heading' => 'Categorías para que tus clientes encuentren todo',
+                'text' => 'Organizá tus productos en categorías para que sea más fácil recorrer el catálogo.',
+                'points' => [
+                    'Cada categoría tiene un ícono (un emoji) y un nombre.',
+                    'La lista indica cuántos productos tiene cada una y si está activa.',
+                    'Se crean desde un formulario, con íconos sugeridos, y se pueden editar o eliminar.',
+                ],
+            ],
+        ],
+        'outro_sections' => [
+            [
+                'type' => 'steps',
+                'id' => 'como-funciona',
+                'title' => 'Cómo funciona',
+                'lead' => 'Tus clientes piden en tres pasos.',
+                'items' => [
+                    ['title' => 'El cliente explora el catálogo', 'text' => 'Ve los productos y navega por las categorías.'],
+                    ['title' => 'Arma su carrito', 'text' => 'Selecciona los productos y las cantidades que quiere pedir.'],
+                    ['title' => 'Envía el pedido por WhatsApp', 'text' => 'Pediwa prepara el mensaje con los productos y los importes para que el cliente lo envíe al comercio.'],
+                ],
+                'note' => 'Pediwa no es una tienda online con pagos integrados: el carrito se guarda en el navegador del cliente y el pedido se comunica por WhatsApp. El comerciante continúa la venta manualmente.',
+            ],
+            [
+                'type' => 'checks',
+                'id' => 'beneficios',
+                'title' => 'Lo que te ofrece Pediwa',
+                'items' => [
+                    'Mostrá tus productos desde un catálogo digital.',
+                    'Organizá los productos por categorías.',
+                    'Destacá ofertas y productos seleccionados.',
+                    'Permití que tus clientes armen su pedido desde el celular.',
+                    'Recibí los pedidos mediante WhatsApp.',
+                    'Administrá el catálogo desde el panel correspondiente.',
+                ],
+            ],
+        ],
         'featured' => true,
         'sort_order' => 30,
-        'published_at' => '2026-10-16',
+        'published_at' => '2026-10-25',
     ],
 ];

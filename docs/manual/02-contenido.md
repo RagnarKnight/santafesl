@@ -97,7 +97,7 @@ Editá el bloque del producto en `products.php` y cambiá el campo. Ejemplos:
 'status' => 'completed',
 ```
 
-Los tres productos actuales (`chms-iglesias`, `pos`, `catalogo-web`) tienen `'status' => 'completed'`, que se muestra como **Terminado**.
+Los tres productos actuales (`chms-iglesias`, `pos`, `pediwa`) tienen `'status' => 'completed'`, que se muestra como **Terminado**.
 
 ## 4. Servicios
 
