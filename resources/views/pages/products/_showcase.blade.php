@@ -22,25 +22,46 @@
 @endforeach
 
 @foreach ($product->screens as $screen)
+    @php
+        $split = $screen['layout'] === 'split';
+        $portrait = $screen['height'] > $screen['width'];
+        // Con una imagen principal arriba (hero_image), ninguna captura necesita cargarse de inmediato.
+        $eager = $loop->first && ! $product->hero_image;
+    @endphp
     <section id="{{ $loop->first ? 'funcionalidades' : $screen['key'] }}" class="section product-section {{ $loop->even ? 'section--tint' : '' }}" aria-labelledby="titulo-{{ $screen['key'] }}">
         <div class="container">
-            <div class="row g-4 mb-4">
-                <div class="col-lg-5">
-                    <h2 id="titulo-{{ $screen['key'] }}" class="section-title mb-3">{{ $screen['heading'] }}</h2>
-                    <p class="prose mb-0">{{ $screen['text'] }}</p>
+            @if ($split)
+                {{-- Texto e imagen lado a lado; en las secciones pares se invierte el orden (solo en pantallas grandes). --}}
+                <div class="row g-4 g-lg-5 align-items-center {{ $loop->even ? 'flex-lg-row-reverse' : '' }}">
+                    <div class="{{ $portrait ? 'col-lg-7' : 'col-lg-5' }}">
+                        <h2 id="titulo-{{ $screen['key'] }}" class="section-title mb-3">{{ $screen['heading'] }}</h2>
+                        <p class="prose mb-4">{{ $screen['text'] }}</p>
+                        <ul class="feature-list feature-list--stack">
+                            @foreach ($screen['points'] as $point)
+                                <li><span class="feature-list__tick"><x-icon name="check" :size="16" /></span><span>{{ $point }}</span></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="{{ $portrait ? 'col-lg-5' : 'col-lg-7' }}">
+                        @include('pages.products._screenshot', ['screen' => $screen, 'eager' => $eager])
+                    </div>
                 </div>
-                <div class="col-lg-7">
-                    <ul class="feature-list feature-list--stack">
-                        @foreach ($screen['points'] as $point)
-                            <li><span class="feature-list__tick"><x-icon name="check" :size="16" /></span><span>{{ $point }}</span></li>
-                        @endforeach
-                    </ul>
+            @else
+                <div class="row g-4 mb-4">
+                    <div class="col-lg-5">
+                        <h2 id="titulo-{{ $screen['key'] }}" class="section-title mb-3">{{ $screen['heading'] }}</h2>
+                        <p class="prose mb-0">{{ $screen['text'] }}</p>
+                    </div>
+                    <div class="col-lg-7">
+                        <ul class="feature-list feature-list--stack">
+                            @foreach ($screen['points'] as $point)
+                                <li><span class="feature-list__tick"><x-icon name="check" :size="16" /></span><span>{{ $point }}</span></li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <figure class="screenshot">
-                <img class="screenshot__img" src="{{ Storage::disk('public')->url($screen['image']) }}" alt="{{ $screen['alt'] }}" width="{{ $screen['width'] }}" height="{{ $screen['height'] }}" @unless ($loop->first) loading="lazy" decoding="async" @endunless>
-                <figcaption class="small text-secondary mt-2">Captura real de {{ $product->brand() }}.{{ $product->screens_note ? ' '.$product->screens_note : '' }} <a href="{{ Storage::disk('public')->url($screen['image']) }}">Ver la imagen completa</a></figcaption>
-            </figure>
+                @include('pages.products._screenshot', ['screen' => $screen, 'eager' => $eager])
+            @endif
         </div>
     </section>
 @endforeach

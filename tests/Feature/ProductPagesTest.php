@@ -11,7 +11,7 @@ const REAL_NUMBER = '5491155550123';
 /** Mensajes exactos pedidos para cada producto. */
 dataset('whatsapp messages', [
     'iglesias' => ['chms-iglesias', 'Hola, quisiera conocer más sobre el sistema CHMS para iglesias de SantaFeSL y solicitar una demostración.'],
-    'caja' => ['pos', 'Hola, quisiera conocer más sobre el sistema de caja de SantaFeSL y solicitar una demostración.'],
+    'caja' => ['pos', 'Hola, quisiera conocer más sobre el sistema POS (punto de venta) de SantaFeSL y consultar cómo podría usarlo en mi negocio.'],
     'pediwa' => ['pediwa', 'Hola, quisiera conocer más sobre Pediwa de SantaFeSL y consultar cómo podría usarlo en mi negocio.'],
 ]);
 
@@ -109,42 +109,6 @@ it('lleva cada llamada a la acción a su ficha o a su sección y esa sección ex
     $this->get(route('products.show', 'pos'))->assertSee('id="funciones"', false);
     $this->get(route('products.show', 'pediwa'))->assertSee('id="como-funciona"', false);
 });
-
-it('presenta cada producto con problema, público, funciones y demostración', function (string $slug) {
-    $product = app(Catalog::class)->product($slug);
-
-    expect($product->features)->toHaveCount(4)->and(count($product->features))->toBeBetween(4, 6);
-
-    $page = $this->get(route('products.show', $slug))->assertOk()
-        ->assertSee('Qué problema resuelve')->assertSee('Para quién es')
-        ->assertSee('id="demostracion"', false)->assertSee('id="funciones"', false)
-        ->assertSee('id="consultar"', false);
-
-    foreach ($product->features as $feature) {
-        $page->assertSee($feature);
-    }
-
-    // Un solo h1 y jerarquía sin saltos.
-    $html = $page->getContent();
-    expect(substr_count($html, '<h1'))->toBe(1);
-})->with(['pos']);
-
-it('avisa que las funciones son orientativas mientras no estén confirmadas', function () {
-    $this->get(route('products.show', 'pos'))
-        ->assertSee('Funciones de referencia')
-        ->assertSee('orientativa')
-        ->assertDontSee('Qué incluye');
-});
-
-it('sin video muestra la maqueta como ilustración conceptual y no un reproductor vacío', function (string $slug) {
-    $html = $this->get(route('products.show', $slug))->assertOk()
-        ->assertSee('No es una captura de pantalla real')
-        ->assertSee('Todavía no hay un video')
-        ->assertSee('role="img"', false)
-        ->getContent();
-
-    expect($html)->not->toContain('<video')->not->toContain('<iframe')->not->toContain('product-video');
-})->with(['pos']);
 
 it('las maquetas no usan estilos en línea ni imágenes externas', function (string $type) {
     $html = Blade::render('<x-product.mockup :type="$type" />', ['type' => $type]);
@@ -472,3 +436,114 @@ it('la dirección vieja del «Catálogo web» redirige a Pediwa y ya no figura e
     expect(array_map(fn ($p) => $p->slug, app(Catalog::class)->products()))->not->toContain('catalogo-web');
     $this->get(route('products.index'))->assertDontSee('Catálogo web');
 });
+
+// --- POS: ficha con capturas reales ---------------------------------------------
+
+it('presenta el POS con su título, descripción y los dos botones pedidos', function () {
+    config(['site.contact.whatsapp' => REAL_NUMBER]);
+
+    $html = $this->get(route('products.show', 'pos'))->assertOk()
+        ->assertSee('Controlá las ventas y la caja de tu negocio desde un solo lugar.')
+        ->assertSee('Un sistema de punto de venta para registrar operaciones')
+        ->assertSee('Consultar por WhatsApp')
+        ->assertSee('Conocer las funcionalidades')
+        ->assertSee('href="#funciones"', false)
+        ->assertSee('id="funciones"', false)
+        ->assertSee('<title>POS: sistema de punto de venta para tu comercio · SantaFeSL</title>', false)
+        ->getContent();
+
+    expect(substr_count($html, '<h1'))->toBe(1);
+});
+
+it('muestra la captura principal y las capturas del POS con sus proporciones originales', function () {
+    $product = app(Catalog::class)->product('pos');
+
+    expect(array_column($product->screens, 'key'))->toBe(['libreta', 'reportes', 'ranking', 'detalle']);
+
+    $files = [$product->hero_image, $product->hero_image['mobile'], ...$product->screens];
+
+    foreach ($product->screens as $screen) {
+        if ($screen['mobile'] !== null) {
+            $files[] = $screen['mobile'];
+        }
+    }
+
+    $html = $this->get(route('products.show', 'pos'))->getContent();
+
+    foreach ($files as $file) {
+        $path = Storage::disk('public')->path($file['image']);
+
+        expect(is_file($path))->toBeTrue("Falta {$file['image']}");
+
+        [$w, $h] = getimagesize($path);
+        expect([$w, $h])->toBe([$file['width'], $file['height']])
+            ->and($html)->toContain('width="'.$file['width'].'" height="'.$file['height'].'"');
+    }
+
+    foreach ([$product->hero_image, ...$product->screens] as $file) {
+        expect(strlen($file['alt']))->toBeGreaterThan(40)->and($html)->toContain('alt="'.e($file['alt']).'"');
+    }
+});
+
+it('usa en el celular la captura vertical de la misma pantalla, sin deslizar la imagen', function () {
+    $html = $this->get(route('products.show', 'pos'))->getContent();
+
+    expect($html)
+        ->toContain('<picture>')
+        ->toContain('media="(max-width: 767.98px)"')
+        ->toContain('hero-shot--fit')
+        ->not->toContain('Deslizá la imagen')
+        ->and(substr_count($html, 'fetchpriority="high"'))->toBe(1);
+
+    // La imagen principal es la única que carga de inmediato; las capturas esperan.
+    preg_match_all('#<img class="screenshot__img"[^>]*>#', $html, $imgs);
+    expect($imgs[0])->toHaveCount(4);
+    foreach ($imgs[0] as $tag) {
+        expect($tag)->toContain('loading="lazy"');
+    }
+});
+
+it('presenta las funciones, los tres pasos y la administración del POS', function () {
+    $this->get(route('products.show', 'pos'))
+        ->assertSee('Todo lo que necesitás para vender')
+        ->assertSee('Punto de venta')->assertSee('Clientes y fiados')->assertSee('Control de caja')
+        ->assertSee('Historial de ventas')->assertSee('Reportes')
+        ->assertSee('id="como-funciona"', false)
+        ->assertSee('Registrá la venta')->assertSee('Registrá el cobro o la cuenta pendiente')->assertSee('Consultá la operación')
+        ->assertSee('no reemplaza la emisión de una factura fiscal')
+        ->assertSee('Una administración más ordenada')
+        ->assertSee('Conocé el sistema y evaluá si es ideal para tu negocio.')
+        ->assertSee('Consultanos para conocer las funciones del POS');
+});
+
+it('el POS no promete funciones, planes ni resultados no verificados', function () {
+    $html = strtolower(strip_tags($this->get(route('products.show', 'pos'))->getContent()));
+
+    foreach (['multitienda', 'sin conexión', 'sin internet', 'offline', 'factura electrónica', 'afip', 'descuento', 'promoción', 'garantiz', 'testimonio'] as $banned) {
+        expect($html)->not->toContain($banned);
+    }
+});
+
+it('el POS usa el contacto central y cae al correo o a /contacto', function () {
+    config(['site.contact.whatsapp' => null, 'site.contact.email' => null]);
+
+    $this->get(route('products.show', 'pos'))
+        ->assertDontSee('wa.me', false)
+        ->assertSee('href="'.route('contact').'"', false)
+        ->assertSee('Conocé el sistema y evaluá si es ideal para tu negocio.');
+});
+
+it('alterna el orden de texto e imagen en las capturas lado a lado', function () {
+    $html = $this->get(route('products.show', 'pos'))->getContent();
+
+    // libreta (1.ª) normal, reportes (2.ª) invertida, ranking (3.ª) normal, detalle (4.ª) invertida.
+    expect(substr_count($html, 'flex-lg-row-reverse'))->toBe(2);
+});
+
+it('rechaza capturas con layout o versión móvil mal definidos', function (array $extra) {
+    product($extra);
+})->throws(InvalidArgumentException::class)->with([
+    'layout inválido' => [['screens' => [['key' => 'a', 'image' => 'x.webp', 'alt' => 'a', 'width' => 10, 'height' => 10, 'heading' => 'h', 'text' => 't', 'layout' => 'otro']]]],
+    'mobile sin tamaño' => [['screens' => [['key' => 'a', 'image' => 'x.webp', 'alt' => 'a', 'width' => 10, 'height' => 10, 'heading' => 'h', 'text' => 't', 'mobile' => ['image' => 'y.webp']]]]],
+    'hero mobile sin imagen' => [['hero_image' => ['image' => 'x.webp', 'alt' => 'a', 'width' => 10, 'height' => 10, 'mobile' => ['width' => 5, 'height' => 5]]]],
+]);

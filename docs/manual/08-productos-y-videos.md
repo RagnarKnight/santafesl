@@ -75,3 +75,14 @@ Pediwa usa el mismo formato de capturas que CHMS, más estos campos opcionales d
 - Imágenes en `storage/app/public/products/pediwa/` (`pediwa-catalogos.webp`, `pediwa-panel.webp`, `pediwa-productos.webp`, `pediwa-banners.webp`, `pediwa-categorias.webp` y la versión chica `pediwa-catalogos-tarjeta.webp` para la tarjeta). Las capturas del panel son las originales, solo convertidas a WebP; el collage se redujo de 3767 a 2000 px de ancho.
 
 Pediwa es el antiguo «Catálogo web»: ocupa su lugar en la lista y la dirección vieja `/productos/catalogo-web` redirige a `/productos/pediwa` (redirección permanente en `routes/web.php`).
+
+## 9. POS: capturas lado a lado y versión para celular
+
+La ficha del POS usa el mismo formato de capturas y suma dos campos opcionales:
+
+- `layout` en cada captura (`stack`, por defecto, o `split`): con `split` el texto y la imagen van lado a lado y se alternan; en el celular se apilan.
+- `mobile` (en una captura o en `hero_image`): `['image' => …, 'width' => …, 'height' => …]`, otra captura real de la misma pantalla que se muestra en pantallas menores a 768 px. Usa el `alt` de la captura principal.
+
+Imágenes en `storage/app/public/products/pos/` (`pos-venta`, `pos-venta-celular`, `pos-libreta`, `pos-reportes`, `pos-reportes-celular`, `pos-reportes-ranking`, `pos-reportes-detalle`, todas `.webp`): son las capturas originales convertidas a WebP sin pérdida, sin recortes ni retoques.
+
+Pendiente de verificar (no hay captura): «Control de caja», el detalle del «Historial de ventas» y los costos de «Productos». Se publican «Control de caja» e «Historial» según lo indicado por el autor; confirmalos o quitalos de `resources/content/products.php`. Usuarios y roles y multitienda no se mencionan.

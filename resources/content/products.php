@@ -20,11 +20,13 @@
 |                                {inquiry_subject} de SantaFeSL y {inquiry_action}."
 |   mockup                       Maqueta HTML/CSS conceptual (church, pos, catalog). NO es una captura real.
 |   headline, lead               Título (h1) y bajada propios de la ficha (opcionales)
-|   screens, modules             Capturas reales (con su texto) y tarjetas de otros módulos. Con screens la ficha
+|   screens, modules             Capturas reales (con su texto) y tarjetas de otros módulos. Cada captura admite 'layout' (stack | split:
+|                                texto e imagen lado a lado, alternando) y 'mobile' (otra captura real para pantallas chicas). Con screens la ficha
 |                                usa el formato de «showcase». Ver docs/manual/08-productos-y-videos.md
 |   short_name, cta_title, cta_text, cta_button, explore_label, explore_anchor, screens_note, video_placeholder
 |                                Textos y opciones de la ficha con capturas (todos opcionales)
-|   hero_image                   Imagen principal bajo el título (collage del producto)
+|   hero_image                   Imagen principal bajo el título (collage del producto). Con 'mobile' => [image, width, height]
+|                                muestra otra captura real (la del celular) en pantallas chicas, sin deslizar.
 |   intro_sections, outro_sections  Bloques de texto antes y después de las capturas (cards, steps o checks)
 |   video                        null mientras no exista un video real. Ver docs/manual/08-productos-y-videos.md
 |
@@ -42,7 +44,7 @@ return [
         'headline' => 'CHMS: la gestión de tu iglesia, más organizada',
         'lead' => 'Organizá la información de los miembros, acompañá su proceso de consolidación, gestioná eventos y mantené un seguimiento claro de la tesorería desde un mismo sistema.',
         'description' => "Es un sistema de gestión pensado para iglesias.\n\nTambién se lo conoce como CHMS, que son las siglas en inglés de «sistema de gestión para iglesias».",
-        'status' => 'completed',
+        'status' => 'production',
         'icon' => 'church',
         'image_path' => 'illustrations/product-church.png',
         'image_alt' => 'Ilustración provisional: un salón comunitario junto a una lista de tareas y tres personas reunidas.',
@@ -150,28 +152,153 @@ return [
     [
         'slug' => 'pos',
         'name' => 'Sistema de caja',
+        'short_name' => 'POS',
         'short_description' => 'Un programa para cobrar y registrar las ventas de un negocio.',
+        'headline' => 'Controlá las ventas y la caja de tu negocio desde un solo lugar.',
+        'lead' => 'Un sistema de punto de venta para registrar operaciones, administrar productos, llevar el control de caja y organizar las cuentas de tus clientes.',
         'description' => "Es un sistema de punto de venta: el programa que se usa en la caja de un negocio.\n\nTambién se lo conoce como POS, por las siglas en inglés de «punto de venta».",
-        'status' => 'completed',
+        'status' => 'production',
         'icon' => 'register',
         'image_path' => 'illustrations/product-pos.png',
         'image_alt' => 'Ilustración provisional: un pequeño comercio con una pantalla de ventas.',
-        'seo_title' => 'Sistema de caja (POS) para tu negocio',
-        'seo_description' => 'Conocé el sistema de caja de SantaFeSL: un programa para registrar las ventas y consultar productos y precios en tu negocio. Pedí una demostración.',
+        'seo_title' => 'POS: sistema de punto de venta para tu comercio',
+        'seo_description' => 'Sistema de punto de venta para kioscos, almacenes y pequeños comercios: ventas, productos, clientes y fiados, y reportes. Consultá por WhatsApp.',
         'cta_label' => 'Explorar funciones',
         'cta_anchor' => 'funciones',
         'problem' => 'Llevar las ventas a mano o en varias planillas lleva tiempo, y es fácil que algo se pierda o no coincida al final del día.',
-        'audience' => 'Pequeños negocios que necesitan cobrar y registrar sus ventas.',
+        'audience' => 'Kioscos, almacenes y pequeños comercios que necesitan cobrar y registrar sus ventas.',
         'features' => [
-            'Registro de ventas',
-            'Consulta de productos',
-            'Gestión de precios',
-            'Consulta de movimientos',
+            'Venta con carrito y cobro en efectivo, transferencia o fiado',
+            'Libreta de clientes con las deudas de cada uno',
+            'Productos con categorías, precios y stock a la vista',
+            'Reportes mensuales de ventas por medio de pago',
         ],
-        'features_confirmed' => false,
-        'inquiry_subject' => 'el sistema de caja',
-        'mockup' => 'pos',
+        // Verificado contra las capturas reales. «Control de caja», «Historial de ventas» (detalle) y «Productos» (costos) no tienen captura: ver docs/manual/08-productos-y-videos.md §9.
+        'features_confirmed' => true,
+        'inquiry_subject' => 'el sistema POS (punto de venta)',
+        'inquiry_action' => 'consultar cómo podría usarlo en mi negocio',
+        'cta_button' => 'Consultar por WhatsApp',
+        'cta_title' => 'Conocé el sistema y evaluá si es ideal para tu negocio.',
+        'cta_text' => 'Consultanos para conocer las funciones del POS y cómo puede ayudarte a organizar las operaciones de tu comercio.',
+        'explore_label' => 'Conocer las funcionalidades',
+        'explore_anchor' => 'funciones',
+        'screens_note' => 'Los datos que se ven son de ejemplo.',
+        'mockup' => null,
         'video' => null,
+        'hero_image' => [
+            'image' => 'products/pos/pos-venta.webp',
+            'alt' => 'Captura real de la pantalla de ventas del sistema POS: un buscador de productos, categorías como Bebidas, Almacén, Lácteos y Golosinas, tarjetas de productos con su precio y su stock, y un carrito con el total y los medios de pago Efectivo, Transfer y Fiado junto al botón Confirmar venta.',
+            'width' => 1351,
+            'height' => 583,
+            'mobile' => ['image' => 'products/pos/pos-venta-celular.webp', 'width' => 720, 'height' => 1531],
+        ],
+        'intro_sections' => [
+            [
+                'type' => 'cards',
+                'id' => 'funciones',
+                'title' => 'Todo lo que necesitás para vender',
+                'lead' => 'Las funciones principales del sistema, pensadas para el día a día de un kiosco, un almacén o un pequeño comercio.',
+                'items' => [
+                    ['title' => 'Punto de venta', 'text' => 'Elegí los productos, ajustá las cantidades en el carrito y confirmá la venta.'],
+                    ['title' => 'Productos', 'text' => 'Un catálogo con la foto, el precio y el stock de cada producto, organizado por categorías y con buscador.'],
+                    ['title' => 'Clientes y fiados', 'text' => 'Una libreta con tus clientes y lo que debe cada uno, para llevar el control de las ventas fiadas y saldar las cuentas.'],
+                    ['title' => 'Control de caja', 'text' => 'Abrí y cerrá la caja y consultá los movimientos correspondientes.'],
+                    ['title' => 'Historial de ventas', 'text' => 'Consultá las ventas registradas y sus detalles. Si una transferencia quedó sin comprobante, se puede agregar después desde el historial.'],
+                    ['title' => 'Reportes', 'text' => 'Totales del mes por medio de pago, ventas diarias, productos más vendidos, mayores deudores y productos sin stock.'],
+                ],
+            ],
+        ],
+        'screens' => [
+            [
+                'key' => 'libreta',
+                'layout' => 'split',
+                'image' => 'products/pos/pos-libreta.webp',
+                'alt' => 'Captura real de La Libreta del sistema POS en un celular: el total adeudado y la cantidad de clientes que deben, un buscador de clientes, el botón Nuevo cliente y una lista de clientes con su teléfono, el monto que debe cada uno y un botón Saldar.',
+                'width' => 720,
+                'height' => 1531,
+                'heading' => 'Las cuentas de tus clientes, en una libreta',
+                'text' => 'La Libreta reúne a los clientes y muestra cuánto debe cada uno, para que las ventas fiadas no se pierdan.',
+                'points' => [
+                    'El total adeudado y cuántos clientes deben, arriba de la lista.',
+                    'Cada cliente con su nombre, su teléfono y el monto que debe.',
+                    'Un buscador de clientes y el botón «Nuevo cliente» para agregar uno.',
+                    'Un botón «Saldar» en cada cuenta para saldar la deuda del cliente.',
+                ],
+            ],
+            [
+                'key' => 'reportes',
+                'layout' => 'split',
+                'image' => 'products/pos/pos-reportes.webp',
+                'mobile' => ['image' => 'products/pos/pos-reportes-celular.webp', 'width' => 778, 'height' => 1551],
+                'alt' => 'Captura real de Reportes del sistema POS: un selector de mes y año, los indicadores de total cobrado, efectivo, transferencia, fiado, ventas y promedio por venta, y un gráfico de barras de ventas diarias dividido en efectivo, transferencia y fiado.',
+                'width' => 1351,
+                'height' => 587,
+                'heading' => 'Reportes: cuánto vendiste y cómo te pagaron',
+                'text' => 'Elegí el mes y el año y mirá los totales de ese período.',
+                'points' => [
+                    'Total cobrado, efectivo, transferencia, fiado, cantidad de ventas y promedio por venta.',
+                    'Un gráfico de ventas diarias, con cada día dividido en efectivo, transferencia y fiado.',
+                    'El total cobrado suma efectivo y transferencia: el fiado figura aparte.',
+                ],
+            ],
+            [
+                'key' => 'ranking',
+                'layout' => 'split',
+                'image' => 'products/pos/pos-reportes-ranking.webp',
+                'alt' => 'Captura real de la parte inferior de Reportes en el sistema POS: la lista de productos más vendidos del mes con sus unidades e importes, los cinco mayores deudores y una lista de productos sin stock con un enlace Reponer en cada uno.',
+                'width' => 1341,
+                'height' => 509,
+                'heading' => 'Qué se vende, quién debe y qué falta',
+                'text' => 'Debajo de los totales, los reportes muestran tres listas para decidir mejor.',
+                'points' => [
+                    'Top de productos del mes, con las unidades vendidas y el importe.',
+                    'Mayores deudores, con lo que debe cada uno.',
+                    'Productos sin stock, con un enlace «Reponer» en cada uno.',
+                ],
+            ],
+            [
+                'key' => 'detalle',
+                'layout' => 'split',
+                'image' => 'products/pos/pos-reportes-detalle.webp',
+                'alt' => 'Captura real de la tabla Detalle por día de Reportes en el sistema POS: por cada fecha, lo cobrado en efectivo, por transferencia y en fiado, la cantidad de órdenes y el total del día, y una fila final con el total del mes.',
+                'width' => 1248,
+                'height' => 509,
+                'heading' => 'El detalle de cada día del mes',
+                'text' => 'Una tabla resume cada fecha con lo que se vendió en cada medio de pago.',
+                'points' => [
+                    'Efectivo, transferencia y fiado de cada día.',
+                    'Cantidad de órdenes y total del día.',
+                    'Una fila final con el total del mes.',
+                ],
+            ],
+        ],
+        'outro_sections' => [
+            [
+                'type' => 'steps',
+                'id' => 'como-funciona',
+                'title' => 'Cómo funciona',
+                'lead' => 'Registrar una venta lleva tres pasos.',
+                'items' => [
+                    ['title' => 'Registrá la venta', 'text' => 'Seleccioná los productos y las cantidades en el carrito.'],
+                    ['title' => 'Registrá el cobro o la cuenta pendiente', 'text' => 'Elegí cómo se paga: efectivo, transferencia o fiado. En una transferencia podés sumar la foto del comprobante, que es opcional.'],
+                    ['title' => 'Consultá la operación', 'text' => 'Revisá las ventas en el historial y los totales en los reportes.'],
+                ],
+                'note' => 'El sistema registra las ventas de tu comercio: es un registro interno y no reemplaza la emisión de una factura fiscal.',
+            ],
+            [
+                'type' => 'checks',
+                'id' => 'administracion',
+                'title' => 'Una administración más ordenada',
+                'lead' => 'Lo que podés llevar al día desde el mismo sistema.',
+                'items' => [
+                    'Productos: catálogo, precios y stock.',
+                    'Clientes: la libreta con lo que debe cada uno.',
+                    'Historial de ventas.',
+                    'Control de caja.',
+                    'Reportes mensuales de ventas.',
+                ],
+            ],
+        ],
         'featured' => true,
         'sort_order' => 20,
         'published_at' => '2026-10-16',
@@ -184,7 +311,7 @@ return [
         'headline' => 'Tu catálogo digital, listo para vender por WhatsApp.',
         'lead' => 'Mostrá tus productos, organizá tu catálogo y recibí pedidos por WhatsApp. Una forma sencilla de digitalizar tu kiosco, almacén o pequeño comercio.',
         'description' => 'Es un catálogo digital para kioscos, almacenes y pequeños comercios. Tus clientes ven los productos, arman su pedido y lo envían por WhatsApp.',
-        'status' => 'completed',
+        'status' => 'production',
         'icon' => 'bag',
         'image_path' => 'illustrations/product-pediwa.png',
         'image_alt' => 'Cinco celulares con catálogos de ejemplo hechos con Pediwa: comida, indumentaria, kiosco, verdulería y tecnología.',

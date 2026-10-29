@@ -77,12 +77,12 @@ final readonly class Entry
         public ?array $video = null,
         public ?string $headline = null,
         public ?string $lead = null,
-        /** @var list<array{key: string, image: string, alt: string, width: int, height: int, heading: string, text: string, points: list<string>}> */
+        /** @var list<array{key: string, image: string, alt: string, width: int, height: int, heading: string, text: string, points: list<string>, layout: string, mobile: array{image: string, width: int, height: int}|null}> */
         public array $screens = [],
         /** @var list<array{name: string, text: string, icon: string}> */
         public array $modules = [],
         public ?string $short_name = null,
-        /** @var array{image: string, alt: string, width: int, height: int}|null */
+        /** @var array{image: string, alt: string, width: int, height: int, mobile: array{image: string, width: int, height: int}|null}|null */
         public ?array $hero_image = null,
         /** @var list<array{type: string, id: string, title: string, lead: ?string, items: list<array{title: ?string, text: string}>, note: ?string}> */
         public array $intro_sections = [],
@@ -196,7 +196,10 @@ final readonly class Entry
     /**
      * Capturas reales del producto, cada una con su explicación.
      *
-     * @return list<array{key: string, image: string, alt: string, width: int, height: int, heading: string, text: string, points: list<string>}>
+     * Cada captura puede llevar «layout» (stack: texto arriba e imagen abajo, por defecto; split: texto e
+     * imagen lado a lado, alternando) y «mobile»: otra captura real que se muestra en pantallas chicas.
+     *
+     * @return list<array{key: string, image: string, alt: string, width: int, height: int, heading: string, text: string, points: list<string>, layout: string, mobile: array{image: string, width: int, height: int}|null}>
      */
     private static function screens(string $type, string $slug, mixed $screens): array
     {
@@ -213,6 +216,12 @@ final readonly class Entry
                 throw new InvalidArgumentException("[{$type}/{$slug}] Captura \"{$screen['key']}\": faltan width y height.");
             }
 
+            $layout = $screen['layout'] ?? 'stack';
+
+            if (! in_array($layout, self::SCREEN_LAYOUTS, true)) {
+                throw new InvalidArgumentException("[{$type}/{$slug}] Captura \"{$screen['key']}\": \"layout\" debe ser stack o split.");
+            }
+
             $result[] = [
                 'key' => $screen['key'],
                 'image' => $screen['image'],
@@ -222,6 +231,8 @@ final readonly class Entry
                 'heading' => $screen['heading'],
                 'text' => $screen['text'],
                 'points' => array_values($screen['points'] ?? []),
+                'layout' => $layout,
+                'mobile' => self::mobileShot($type, $slug, "captura \"{$screen['key']}\"", $screen['mobile'] ?? null),
             ];
         }
 
@@ -250,10 +261,37 @@ final readonly class Entry
 
     public const SECTION_TYPES = ['cards', 'steps', 'checks'];
 
+    public const SCREEN_LAYOUTS = ['stack', 'split'];
+
+    /**
+     * Versión para pantallas chicas de una captura (otra captura real de la misma pantalla, por ejemplo la
+     * del celular). Comparte el texto alternativo de la captura principal, porque ambas muestran lo mismo.
+     *
+     * @return array{image: string, width: int, height: int}|null
+     */
+    private static function mobileShot(string $type, string $slug, string $where, mixed $mobile): ?array
+    {
+        if ($mobile === null) {
+            return null;
+        }
+
+        if (! isset($mobile['image']) || ! is_string($mobile['image']) || trim($mobile['image']) === '') {
+            throw new InvalidArgumentException("[{$type}/{$slug}] {$where}: la versión «mobile» necesita \"image\".");
+        }
+
+        if ((int) ($mobile['width'] ?? 0) < 1 || (int) ($mobile['height'] ?? 0) < 1) {
+            throw new InvalidArgumentException("[{$type}/{$slug}] {$where}: la versión «mobile» necesita width y height.");
+        }
+
+        return ['image' => $mobile['image'], 'width' => (int) $mobile['width'], 'height' => (int) $mobile['height']];
+    }
+
     /**
      * Imagen principal de la ficha (por ejemplo, un collage del producto).
      *
-     * @return array{image: string, alt: string, width: int, height: int}|null
+     * Con «mobile» se muestra otra captura real en pantallas chicas (sin deslizar la imagen).
+     *
+     * @return array{image: string, alt: string, width: int, height: int, mobile: array{image: string, width: int, height: int}|null}|null
      */
     private static function heroImage(string $type, string $slug, mixed $hero): ?array
     {
@@ -271,7 +309,13 @@ final readonly class Entry
             throw new InvalidArgumentException("[{$type}/{$slug}] hero_image: faltan width y height.");
         }
 
-        return ['image' => $hero['image'], 'alt' => $hero['alt'], 'width' => (int) $hero['width'], 'height' => (int) $hero['height']];
+        return [
+            'image' => $hero['image'],
+            'alt' => $hero['alt'],
+            'width' => (int) $hero['width'],
+            'height' => (int) $hero['height'],
+            'mobile' => self::mobileShot($type, $slug, 'hero_image', $hero['mobile'] ?? null),
+        ];
     }
 
     /**

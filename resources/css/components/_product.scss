@@ -557,3 +557,42 @@
     color: #fff;
     font-weight: 700;
 }
+
+// --- Capturas lado a lado y versión para celular --------------------------------
+
+// Captura vertical (celular): no se estira hasta ocupar todo el ancho.
+.screenshot--phone .screenshot__img {
+    max-width: 21rem;
+    margin-inline: auto;
+}
+
+.screenshot--phone figcaption {
+    max-width: 21rem;
+    margin-inline: auto;
+}
+
+// Captura horizontal con versión para celular: en pantallas chicas muestra la vertical, acotada.
+@include media-breakpoint-down(md) {
+    .screenshot--adaptive .screenshot__img {
+        max-width: 21rem;
+        margin-inline: auto;
+    }
+
+    .screenshot--adaptive figcaption {
+        max-width: 21rem;
+        margin-inline: auto;
+    }
+}
+
+// Imagen principal con versión para celular: sin deslizar, centrada y de ancho acotado.
+.hero-shot--fit {
+    overflow: visible;
+}
+
+@include media-breakpoint-down(md) {
+    .hero-shot--fit .hero-shot__img {
+        width: 100%;
+        max-width: 19rem;
+        margin-inline: auto;
+    }
+}

@@ -11,7 +11,15 @@
                 <a class="btn btn-outline-primary btn-lg" href="#funciones">Ver las funciones</a>
             @endif
         </div>
-        @if ($product->hero_image)
+        @if ($product->hero_image && $product->hero_image['mobile'])
+            {{-- Captura real a tamaño completo: en pantallas chicas se muestra la versión del celular, sin deslizar. --}}
+            <figure class="hero-shot hero-shot--fit">
+                <picture>
+                    <source media="(max-width: 767.98px)" srcset="{{ Storage::disk('public')->url($product->hero_image['mobile']['image']) }}" width="{{ $product->hero_image['mobile']['width'] }}" height="{{ $product->hero_image['mobile']['height'] }}">
+                    <img class="hero-shot__img" src="{{ Storage::disk('public')->url($product->hero_image['image']) }}" alt="{{ $product->hero_image['alt'] }}" width="{{ $product->hero_image['width'] }}" height="{{ $product->hero_image['height'] }}" fetchpriority="high">
+                </picture>
+            </figure>
+        @elseif ($product->hero_image)
             {{-- En el celular el collage se ve más grande y se desliza dentro de su marco (la página no se desplaza). --}}
             <figure class="hero-shot" tabindex="0" role="group" aria-label="{{ $product->brand() }}: catálogos de ejemplo. Deslizá para ver todos.">
                 <img class="hero-shot__img" src="{{ Storage::disk('public')->url($product->hero_image['image']) }}" alt="{{ $product->hero_image['alt'] }}" width="{{ $product->hero_image['width'] }}" height="{{ $product->hero_image['height'] }}" fetchpriority="high">
