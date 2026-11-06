@@ -28,17 +28,17 @@ it('responde 200 en la ficha de cada producto publicado', function () {
     }
 });
 
-it('muestra los productos publicados con el estado Terminado', function () {
+it('muestra los productos publicados con el estado Disponible', function () {
     $products = app(Catalog::class)->products();
 
     expect(array_map(fn ($p) => $p->slug, $products))->toBe(['chms-iglesias', 'pos', 'pediwa']);
 
     foreach ($products as $product) {
-        expect($product->statusLabel())->toBe('Terminado');
-        $this->get(route('products.show', $product->slug))->assertSee('Terminado');
+        expect($product->statusLabel())->toBe('Disponible');
+        $this->get(route('products.show', $product->slug))->assertSee('Disponible');
     }
 
-    $this->get(route('products.index'))->assertSee('Terminado');
+    $this->get(route('products.index'))->assertSee('Disponible');
 });
 
 it('no publica el Laboratorio: sin rutas, enlaces ni menciones visibles', function () {

@@ -31,7 +31,7 @@
 |   video                        null mientras no exista un video real. Ver docs/manual/08-productos-y-videos.md
 |
 | Estados válidos: development, beta, production, completed, paused, archived.
-| Los productos publicados figuran como "Terminado" (completed).
+| Los productos publicados figuran como "Disponible" (production).
 | published_at: null = borrador; fecha (Y-m-d) pasada o actual = publicado.
 |
 */
@@ -232,7 +232,7 @@ return [
                 'mobile' => ['image' => 'products/pos/pos-reportes-celular.webp', 'width' => 778, 'height' => 1551],
                 'alt' => 'Captura real de Reportes del sistema POS: un selector de mes y año, los indicadores de total cobrado, efectivo, transferencia, fiado, ventas y promedio por venta, y un gráfico de barras de ventas diarias dividido en efectivo, transferencia y fiado.',
                 'width' => 1351,
-                'height' => 587,
+                'height' => 582,
                 'heading' => 'Reportes: cuánto vendiste y cómo te pagaron',
                 'text' => 'Elegí el mes y el año y mirá los totales de ese período.',
                 'points' => [

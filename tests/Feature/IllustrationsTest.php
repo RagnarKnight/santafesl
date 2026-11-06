@@ -8,30 +8,44 @@ function illustrationFiles(): array
     return glob(dirname(__DIR__, 2).'/storage/app/public/illustrations/*.svg') ?: [];
 }
 
-it('incluye las ilustraciones provisionales esperadas', function (string $name) {
-    expect(storage_path("app/public/illustrations/{$name}.svg"))->toBeFile();
-})->with(['hero-technology', 'product-church', 'product-pos', 'product-catalog', 'project-sincnetwork', 'project-netwatch']);
+it('incluye la ilustración de portada y las de cada producto y proyecto', function () {
+    $paths = [config('site.hero.image')];
 
-it('mantiene cada SVG válido, liviano y sin scripts ni referencias externas', function (string $file) {
-    $xml = file_get_contents($file);
-
-    expect(strlen($xml))->toBeLessThan(20_000);
-
-    $dom = new DOMDocument;
-    expect($dom->loadXML($xml))->toBeTrue();
-    expect($dom->documentElement->nodeName)->toBe('svg');
-
-    foreach (['script', 'foreignObject', 'style', 'image', 'use', 'a', 'iframe'] as $tag) {
-        expect($dom->getElementsByTagName($tag)->length)->toBe(0, "<{$tag}> no permitido en {$file}");
+    foreach (['products', 'projects'] as $type) {
+        foreach (app(Catalog::class)->all($type, publishedOnly: false) as $entry) {
+            if ($entry->image_path !== null) {
+                $paths[] = $entry->image_path;
+            }
+        }
     }
 
-    foreach ((new DOMXPath($dom))->query('//@*') as $attr) {
-        expect(strtolower($attr->nodeName))->not->toStartWith('on')->not->toContain('href');
-        expect($attr->nodeValue)->not->toContain('http')->not->toContain('url(')->not->toContain('javascript:');
+    foreach ($paths as $path) {
+        expect(Storage::disk('public')->exists($path))->toBeTrue("Falta la imagen {$path}");
     }
+});
 
-    expect(str_replace('http://www.w3.org/2000/svg', '', $xml))->not->toContain('http');
-})->with(fn () => array_map(fn ($f) => [$f], illustrationFiles()));
+it('mantiene cada SVG válido, liviano y sin scripts ni referencias externas', function () {
+    foreach (illustrationFiles() as $file) {
+        $xml = file_get_contents($file);
+
+        expect(strlen($xml))->toBeLessThan(20_000);
+
+        $dom = new DOMDocument;
+        expect($dom->loadXML($xml))->toBeTrue();
+        expect($dom->documentElement->nodeName)->toBe('svg');
+
+        foreach (['script', 'foreignObject', 'style', 'image', 'use', 'a', 'iframe'] as $tag) {
+            expect($dom->getElementsByTagName($tag)->length)->toBe(0, "<{$tag}> no permitido en {$file}");
+        }
+
+        foreach ((new DOMXPath($dom))->query('//@*') as $attr) {
+            expect(strtolower($attr->nodeName))->not->toStartWith('on')->not->toContain('href');
+            expect($attr->nodeValue)->not->toContain('http')->not->toContain('url(')->not->toContain('javascript:');
+        }
+
+        expect(str_replace('http://www.w3.org/2000/svg', '', $xml))->not->toContain('http');
+    }
+});
 
 it('usa en el contenido solo imágenes que existen y llevan texto alternativo', function () {
     $catalog = app(Catalog::class);

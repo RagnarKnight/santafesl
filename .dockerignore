@@ -1,0 +1,43 @@
+# Dependencias (se instalan/compilan dentro de la imagen)
+/vendor
+/node_modules
+
+# Secretos — nunca deben terminar dentro de la imagen
+.env
+.env.*
+!.env.example
+!env.production.example
+
+# Runtime / datos — persisten vía volúmenes, no van en la imagen
+/database/*.sqlite
+/database/*.sqlite-*
+/database/.sqlite-data
+/storage/app/*
+!/storage/app/.gitignore
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/framework/testing/*
+/storage/logs/*
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+# Control de versiones / entorno local
+.git
+.gitignore
+.gitattributes
+.editorconfig
+.phpunit.result.cache
+
+# Assets de build de Vite (se generan en la etapa "assets", no hace
+# falta que vengan del contexto de build)
+/public/build
+/public/hot
+
+# Cosas del desarrollador, no del proyecto
+ema.sh
+/scripts
+*.tar.gz
+
+# Documentación (no afecta el funcionamiento, no hace falta en la imagen)
+/docs

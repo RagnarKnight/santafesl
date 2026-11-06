@@ -74,5 +74,14 @@
         @case('monitor')
             <rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>
             @break
+        @case('mail')
+            <rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>
+            @break
+        @case('inbox')
+            <path d="M4 13l2-8h12l2 8M4 13v6h16v-6M4 13h5l1 2h4l1-2h5"/>
+            @break
+        @case('alert')
+            <path d="M12 4l9 16H3L12 4zM12 10v4M12 17h.01"/>
+            @break
     @endswitch
 </svg>
