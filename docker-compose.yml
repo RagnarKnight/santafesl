@@ -1,0 +1,75 @@
+# =============================================================================
+# SantaFeSL — Docker Compose
+# =============================================================================
+# Servicios:
+#   app  PHP-FPM (Dockerfile)          escucha en :9000, solo red interna
+#   web  Nginx   (Dockerfile.nginx)    escucha en :8080, publicado en 127.0.0.1
+#
+# nginx/default.conf usa `fastcgi_pass app:9000`: el servicio PHP DEBE llamarse
+# "app". Nginx del host (TLS) debe apuntar a http://127.0.0.1:${WEB_PORT}.
+#
+# Sin volúmenes: el sitio es de solo lectura y las imágenes (storage/app/public)
+# van dentro de las imágenes.
+#
+# Uso:
+#   cp .env.production.example .env.production   (y completar APP_KEY)
+#   docker compose build
+#   docker compose up -d
+# =============================================================================
+
+name: santafesl
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: santafesl-app:latest
+    restart: unless-stopped
+    env_file: .env.production
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test: ["CMD-SHELL", "php -r '$$s=@fsockopen(\"127.0.0.1\",9000); exit($$s?0:1);'"]
+      interval: 15s
+      timeout: 5s
+      start_period: 20s
+      retries: 5
+    logging: *default-logging
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    image: santafesl-web:latest
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    # El sistema de archivos de Nginx es de solo lectura; solo estas rutas se escriben.
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /run
+      - /tmp
+    ports:
+      # Solo local: el Nginx del host (TLS) hace de proxy. Otro puerto:
+      #   WEB_PORT=9090 docker compose up -d
+      - "127.0.0.1:${WEB_PORT:-8080}:8080"
+    logging: *default-logging

@@ -8,12 +8,14 @@
 !.env.example
 !env.production.example
 
-# Runtime / datos — persisten vía volúmenes, no van en la imagen
+# Runtime / datos — no van en la imagen (salvo storage/app/public, ver abajo)
 /database/*.sqlite
 /database/*.sqlite-*
 /database/.sqlite-data
 /storage/app/*
 !/storage/app/.gitignore
+# Imágenes del sitio (logo, capturas, collages): van dentro de la imagen.
+!/storage/app/public
 /storage/framework/cache/*
 /storage/framework/sessions/*
 /storage/framework/views/*
@@ -41,3 +43,15 @@ ema.sh
 
 # Documentación (no afecta el funcionamiento, no hace falta en la imagen)
 /docs
+
+# Notas, pruebas y herramientas de desarrollo (no se usan en producción)
+/tests
+phpunit.xml
+tarea.md
+CLAUDE.md
+AGENTS.md
+/.claude
+/.agents
+.mcp.json
+boost.json
+docker-compose*.yml

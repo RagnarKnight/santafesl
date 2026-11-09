@@ -13,6 +13,22 @@ Sitio web público de **SantaFeSL**: programas, servicios y contacto. Hecho con 
 | Node.js | 22.12 o superior (o 20.19+) | Compilar CSS y JS con Vite |
 | npm | el que trae Node | Instalar las dependencias de JavaScript |
 
+## Producción con Docker
+
+Dos contenedores: `app` (PHP-FPM) y `web` (Nginx, puerto 8080 publicado solo en `127.0.0.1`; el Nginx del host termina TLS y hace de proxy).
+
+```bash
+cp .env.production.example .env.production   # completar APP_KEY, APP_URL y contacto
+docker compose build
+docker compose up -d
+docker compose ps                            # ambos servicios en "healthy"
+curl -I http://127.0.0.1:8080/up
+```
+
+- Sin volúmenes: las imágenes del sitio (`storage/app/public`) viajan dentro de la imagen `web`. Para cambiarlas, reemplazá los archivos y volvé a construir (`docker compose build && docker compose up -d`).
+- Otro puerto local: `WEB_PORT=9090 docker compose up -d`.
+- Logs: `docker compose logs -f app web`. Detener: `docker compose down`.
+
 ## Instalar y probar (clon limpio)
 
 ```bash

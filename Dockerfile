@@ -49,7 +49,7 @@ RUN apk add --no-cache \
         xml \
         zip
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY composer.json composer.lock* ./
 
@@ -93,9 +93,13 @@ RUN apk add --no-cache \
     && docker-php-ext-install \
         gd \
         mbstring \
+        opcache \
         xml \
         zip \
     && apk del .build-deps
+
+# Ajustes de PHP para producción (opcache, sin errores en pantalla, límites).
+COPY docker/php/production.ini /usr/local/etc/php/conf.d/zz-production.ini
 
 COPY --chown=www-data:www-data . .
 

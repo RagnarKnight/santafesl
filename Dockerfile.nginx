@@ -14,17 +14,23 @@ COPY . .
 
 RUN npm run build && rm -f public/storage
 
-FROM nginx:alpine
+FROM nginx:1.28-alpine
 
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # public/ completo (index.php incluido: `try_files $uri =404` lo comprueba acá
-# antes de pasarlo a PHP-FPM). public/storage apunta al volumen de imágenes.
+# antes de pasarlo a PHP-FPM).
 COPY --from=node-builder /app/public /var/www/html/public
+
+# Imágenes del sitio (logo, capturas, collages): el sitio es de solo lectura,
+# así que viajan dentro de la imagen y se sirven en /storage sin volúmenes.
+# Para cambiarlas: reemplazar los archivos en storage/app/public y reconstruir.
+COPY storage/app/public /var/www/html/storage/app/public
+
 RUN rm -f /var/www/html/public/storage \
-    && mkdir -p /var/www/html/storage/app/public \
-    && ln -s ../storage/app/public /var/www/html/public/storage
+    && ln -s ../storage/app/public /var/www/html/public/storage \
+    && chmod -R a+rX /var/www/html/storage
 
 EXPOSE 8080
 
